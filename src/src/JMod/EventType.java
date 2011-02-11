@@ -1,0 +1,37 @@
+package JMod;
+
+public enum EventType {
+	KeyPressed,
+	KeyReleased,
+	MouseButtonDown,
+	MouseButtonUp,
+	BeforeLogin,
+	AfterLogin,
+	BeforeLogout,
+	AfterLogout,
+	BeginType,
+	BeforeSendMessage,
+	AfterSendMessage,
+	MessageReceived,
+	Kicked,
+	Banned,
+	Spawning,
+	BlockPlaced,
+	BlockRemoved,
+	BlockClicked,
+	BlockRightClicked,
+	ArmSwing,
+	UseItem,
+	DropItem,
+	ChangeItemSelection,
+	OpenInventory,
+	CloseInventory,
+	PauseGame,
+	ResumeGame,
+	UpdateGame,
+	DaylightChanged,
+	DrawWorld,
+	DrawGUI,
+	Crafting
+	
+}
