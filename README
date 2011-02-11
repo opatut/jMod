@@ -6,3 +6,5 @@ You have to decompile minecraft yourself (using the Minecraft Coder Pack MCP)
 and copy all minecraft sources to "src/minecraft/net/minecraft/client" and
 "src/minecraft/net/minecraft/src".
 
+== Note for plugin developers ==
+Please wait until the official API is released.
