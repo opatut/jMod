@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 public class Event {
 	public Event(EventType type) {
+		mData = new ArrayList<Object>();
 		mType = type;
 	}
 	

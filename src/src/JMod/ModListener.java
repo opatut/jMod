@@ -16,6 +16,7 @@ public class ModListener {
         if (INSTANCE == null) {
         	INSTANCE = new ModListener();
         }
+        
         return INSTANCE;
     }
 	
@@ -27,12 +28,14 @@ public class ModListener {
 		AddHook(type, plugin, method, plugin);
 	}
 	public void AddHook(EventType type, Plugin plugin, Method method, Object target) {
+		
 		Hook h = new Hook();
 		h.mEventType = type;
 		h.mTargetObject = target;
 		h.mMethod = method;
 		h.mPlugin = plugin;
 		mHooks.add(h);
+		
 	}
 	
 	public void RemoveHook(Hook hook) {
@@ -40,6 +43,7 @@ public class ModListener {
 	}
 	
 	public void HandleEvent(Event event) {
+		
 		for(Hook h: mHooks) {
 			if(h.mEventType == event.mType) {
 				h.Invoke(event);

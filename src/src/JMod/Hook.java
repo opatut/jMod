@@ -9,23 +9,24 @@ public class Hook {
 			return;
 		
 		try {
-			switch(e.mType) {
-			case KeyPressed:
-			case KeyReleased:
+			
+			if(e.mType == EventType.KeyPressed || e.mType == EventType.KeyReleased){
 				mMethod.invoke(mTargetObject, e.GetData(0));
-				break;
-			default:
+			}else if(e.mType == EventType.BlockPlaced){
+				mMethod.invoke(mTargetObject, e.GetData(0),e.GetData(1),e.GetData(2),e.GetData(3));
+				
+			}else{
 				mMethod.invoke(mTargetObject);
-				break;
 			}
 			
+			
 		} catch (InvocationTargetException ex) {
-			Logger.getLogger("Minecraft").severe("Could not call method " + mMethod.getName() 
+			System.out.println("Could not call method " + mMethod.getName() 
 					+ " of an object of type " + mTargetObject.getClass().getName() 
 					+ " as callback for Event " + e.mType.toString() + 
 					" due to wrong invocation.");
 		} catch (IllegalAccessException ex) {
-			Logger.getLogger("Minecraft").severe("Could not call method " + mMethod.getName() 
+			System.out.println("Could not call method " + mMethod.getName() 
 					+ " of an object of type " + mTargetObject.getClass().getName() 
 					+ " as callback for Event " + e.mType.toString() + 
 					" due to restricted method access.");
