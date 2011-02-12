@@ -9,7 +9,6 @@ public class PluginDownloader {
 	// via singleton
 	private PluginDownloader() {
 		mThreads = new HashMap<String, PluginDownloaderThread>();
-		mConfigs = new HashMap<String, String>();
 	}
 	
 	// Get the singleton instance / create one if none exists
@@ -21,16 +20,7 @@ public class PluginDownloader {
         return INSTANCE;
     }
 	
-	public String DownloadConfigFile(String name) throws IOException {
-		String config = "";
-		URL url = new URL("http://opatut.dyndns.org:81/jmod/config/" + name);
-		BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream()));
-		while((config += reader.readLine()) != null)
-			config += System.getProperty("line.separator");
-        reader.close();
-        mConfigs.put(name,config);
-		return config;
-	}
+
 	
 	public boolean DownloadPlugin(String name) {
 		try {
@@ -59,7 +49,6 @@ public class PluginDownloader {
 			CancelPluginDownload(s);
 		}
 	}
-	private HashMap<String,String> mConfigs;
 	private HashMap<String,PluginDownloaderThread> mThreads;
 	private static PluginDownloader INSTANCE = null;
 }

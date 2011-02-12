@@ -9,11 +9,12 @@ import org.ini4j.Profile.Section;
 
 public class PluginConfig {
 	
-	public PluginConfig() {}
+	public PluginConfig() {
+		mProperties = new HashMap<String, String>();
+	}
 	
-	public boolean LoadFromUrl(String config) throws IOException {
+	public boolean LoadFromUrl(URL url) throws IOException {
 		
-		URL url = new URL("http://opatut.dyndns.org:81/jmod/config/" + config);
 		Ini ini = new Ini();
 		ini.load(new InputStreamReader(url.openStream()));
 		for(Entry<String, Section> entry: ini.entrySet()) {
