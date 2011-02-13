@@ -3,3 +3,5 @@ bin/
 minecraft/
 minecraft_server/
 .classpath
+
+*.classpath

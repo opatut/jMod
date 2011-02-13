@@ -3,6 +3,8 @@ package JMod;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 
+import net.minecraft.client.Minecraft;
+
 
 public class ModListener {
 	// Make constructor private so this class can only be used
@@ -50,7 +52,7 @@ public class ModListener {
 			}
 		}
 	}
-	
+	public Minecraft mc;
 	public ArrayList<Hook> mHooks;
 	private static ModListener INSTANCE = null;
 }

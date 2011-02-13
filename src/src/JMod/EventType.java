@@ -1,37 +1,39 @@
 package JMod;
 
 public enum EventType {
-	KeyPressed,
+	KeyPressed, //Done OnKeyPressed(int key)
 	KeyReleased,
 	MouseButtonDown,
 	MouseButtonUp,
 	BeforeLogin,
-	AfterLogin,
+	AfterLogin, //Done OnLogin(int protocolVersion)
 	BeforeLogout,
 	AfterLogout,
+	ServerHandshake, //Done OnServerHandshake(String ServerID)
 	BeginType,
 	BeforeSendMessage,
 	AfterSendMessage,
-	MessageReceived,
-	Kicked,
+	MessageReceived, //Done OnMessageReceived(String message)
+	Kicked, //Done OnKicked()
 	Banned,
 	Spawning,
-	BlockPlaced,
+	BlockPlaced, //Done OnBlockPlaced(int itemID,int posX,int posY,int posZ)
 	BlockRemoved,
 	BlockClicked,
 	BlockRightClicked,
 	ArmSwing,
 	UseItem,
 	DropItem,
+	CollectItem, //Done OnPlayerCollectItem(Entity Item,Entity Player)
 	ChangeItemSelection,
 	OpenInventory,
 	CloseInventory,
 	PauseGame,
+	HealthChanged,
 	ResumeGame,
-	UpdateGame,
+	UpdateGame, //Done OnGameUpdate()
 	DaylightChanged,
 	DrawWorld,
 	DrawGUI,
 	Crafting
-	
 }

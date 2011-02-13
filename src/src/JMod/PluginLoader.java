@@ -6,6 +6,7 @@ import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+
 /**
  * This class loads and manages all mods. 
  * @author opatut
@@ -17,7 +18,7 @@ public class PluginLoader {
 		mPlugins = new HashMap<String, Plugin>();
 		mAvailablePlugins = new ArrayList<File>();
 		
-		PluginDownloader.getInstance().DownloadPlugin("TestPlugin1");
+		//PluginDownloader.getInstance().DownloadPlugin("TestPlugin1");
 		
 		RefreshPluginList();
 		if (!LoadPlugin("TestPlugin1")) {
@@ -26,7 +27,7 @@ public class PluginLoader {
 			EnablePlugin("TestPlugin1");
 		}
 		ModListener.getInstance().HandleEvent(new JMod.Event(EventType.UpdateGame));
-			
+		
 	}
 	
 	public void RefreshPluginList() {
@@ -45,7 +46,7 @@ public class PluginLoader {
 	}
 	
 	// Get the singleton instance / create one if none exists
-	public static PluginLoader getInstance() {
+	public static PluginLoader getInstance(){
         if (INSTANCE == null) {
         	INSTANCE = new PluginLoader();
         }
