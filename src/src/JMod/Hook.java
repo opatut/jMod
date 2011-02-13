@@ -9,17 +9,29 @@ public class Hook {
 			return;
 		
 		try {
-			
-			if(e.mType == EventType.KeyPressed || e.mType == EventType.KeyReleased){
-				mMethod.invoke(mTargetObject, e.GetData(0));
-			}else if(e.mType == EventType.BlockPlaced){
-				mMethod.invoke(mTargetObject, e.GetData(0),e.GetData(1),e.GetData(2),e.GetData(3));
+			switch(e.mType){
+			case KeyPressed:
+			case KeyReleased:
+			case AfterLogin:
+			case ServerHandshake:
+			case MessageReceived:
 				
-			}else{
+				mMethod.invoke(mTargetObject, e.GetData(0));
+				break;
+			case BlockPlaced:
+				mMethod.invoke(mTargetObject, e.GetData(0),e.GetData(1),e.GetData(2),e.GetData(3));
+				break;
+				
+			case MouseButtonDown:
+				mMethod.invoke(mTargetObject, e.GetData(0),e.GetData(1),e.GetData(2));
+				break;
+				
+			default:
 				mMethod.invoke(mTargetObject);
+				break;
 			}
 			
-			
+
 		} catch (InvocationTargetException ex) {
 			System.out.println("Could not call method " + mMethod.getName() 
 					+ " of an object of type " + mTargetObject.getClass().getName() 
