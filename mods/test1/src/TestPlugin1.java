@@ -29,6 +29,9 @@ public class TestPlugin1 extends Plugin {
 			ModListener.getInstance().AddHook(EventType.KeyReleased, this, 
 					getClass().getDeclaredMethod("OnKeyReleased", int.class));
 			
+			ModListener.getInstance().AddHook(EventType.MouseButtonDown, this, 
+					getClass().getDeclaredMethod("OnMouseClick", int.class,int.class,int.class));
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -67,6 +70,10 @@ public class TestPlugin1 extends Plugin {
 		
 		
 		System.out.println("You placed a " + ItemName + " block on the position ("+posX+","+posY+","+posZ+")");
+	}
+	
+	public void OnMouseClick(int button,int posX, int posY) {
+		System.out.println("MousePos: " + "(" + posX + "," + posY + ")");
 	}
 	
 	public void OnKeyPressed(int key) {

@@ -2,9 +2,8 @@ package JMod;
 
 public enum EventType {
 	KeyPressed, //Done OnKeyPressed(int key)
-	KeyReleased,
-	MouseButtonDown,
-	MouseButtonUp,
+	KeyReleased, //Done OnKeyReleased(int key)
+	MouseButtonDown, //Done OnMouseButtonDown(int MouseButton, int mouseX, int mouseY)
 	BeforeLogin,
 	AfterLogin, //Done OnLogin(int protocolVersion)
 	BeforeLogout,
