@@ -1,15 +1,12 @@
-Only in .\minecraft: Start.java
-Only in .\minecraft: gd.java
-Only in .\minecraft: jinput.jar
-Only in .\minecraft: lwjgl.jar
-Only in .\minecraft: lwjgl_util.jar
-Only in .\minecraft: minecraft.jar
-Only in .\minecraft: natives
-diff -u -r .\minecraft_original/net/minecraft/client/Minecraft.java .\minecraft/net/minecraft/client/Minecraft.java
---- .\minecraft_original/net/minecraft/client/Minecraft.java	Fri Feb 11 21:05:38 2011
-+++ .\minecraft/net/minecraft/client/Minecraft.java	Sun Feb 13 09:04:09 2011
-@@ -4,6 +4,10 @@
+diff -ur ./minecraft_original/net/minecraft/client/Minecraft.java ./minecraft/net/minecraft/client/Minecraft.java
+--- ./minecraft_original/net/minecraft/client/Minecraft.java	2011-02-13 12:18:20.320000352 +0100
++++ ./minecraft/net/minecraft/client/Minecraft.java	2011-02-13 12:26:29.330000351 +0100
+@@ -2,8 +2,14 @@
+ // Jad home page: http://www.kpdus.com/jad.html
+ // Decompiler options: packimports(3) braces deadcode 
  
++// this is a test comment
++
  package net.minecraft.client;
  
 +import JMod.EventType;
@@ -19,7 +16,7 @@ diff -u -r .\minecraft_original/net/minecraft/client/Minecraft.java .\minecraft/
  import net.minecraft.src.AxisAlignedBB;
  import net.minecraft.src.Block;
  import net.minecraft.src.BlockGrass;
-@@ -86,6 +90,7 @@
+@@ -86,6 +92,7 @@
  import org.lwjgl.opengl.DisplayMode;
  import org.lwjgl.util.glu.GLU;
  
@@ -27,16 +24,16 @@ diff -u -r .\minecraft_original/net/minecraft/client/Minecraft.java .\minecraft/
  // Referenced classes of package net.minecraft.client:
  //            MinecraftApplet
  
-@@ -95,6 +100,8 @@
+@@ -95,6 +102,8 @@
  
      public Minecraft(Component component, Canvas canvas, MinecraftApplet minecraftapplet, int i, int j, boolean flag)
      {
 +    	PluginLoader.getInstance();
 +    	ModListener.getInstance().mc = this;
-         mainFrame = false;
+         fullscreen = false;
          timer = new Timer(20F);
          session = null;
-@@ -818,6 +825,7 @@
+@@ -818,6 +827,7 @@
  
      private void clickMouse(int i)
      {
@@ -44,7 +41,7 @@ diff -u -r .\minecraft_original/net/minecraft/client/Minecraft.java .\minecraft/
          if(i == 0 && field_6282_S > 0)
          {
              return;
-@@ -997,6 +1005,7 @@
+@@ -997,6 +1007,7 @@
  
      public void runTick()
      {
@@ -52,7 +49,7 @@ diff -u -r .\minecraft_original/net/minecraft/client/Minecraft.java .\minecraft/
          ingameGUI.func_555_a();
          entityRenderer.getMouseOver(1.0F);
          if(thePlayer != null)
-@@ -1091,7 +1100,21 @@
+@@ -1091,7 +1102,21 @@
                  {
                      break;
                  }
@@ -74,9 +71,17 @@ diff -u -r .\minecraft_original/net/minecraft/client/Minecraft.java .\minecraft/
                  if(Keyboard.getEventKeyState())
                  {
                      if(Keyboard.getEventKey() == 87)
-diff -u -r .\minecraft_original/net/minecraft/src/NetClientHandler.java .\minecraft/net/minecraft/src/NetClientHandler.java
---- .\minecraft_original/net/minecraft/src/NetClientHandler.java	Fri Feb 11 21:05:39 2011
-+++ .\minecraft/net/minecraft/src/NetClientHandler.java	Sun Feb 13 08:49:23 2011
+Nur in ./minecraft/net/minecraft/client: Minecraft.java.orig.
+Nur in ./minecraft/net/minecraft/client: Minecraft.java.rej.
+diff -ur ./minecraft_original/net/minecraft/src/NetClientHandler.java ./minecraft/net/minecraft/src/NetClientHandler.java
+--- ./minecraft_original/net/minecraft/src/NetClientHandler.java	2011-02-13 12:18:20.293333685 +0100
++++ ./minecraft/net/minecraft/src/NetClientHandler.java	2011-02-13 12:22:19.316667019 +0100
+@@ -1,4 +1,4 @@
+-package net.minecraft.src;
++package net.minecraft.src;
+ // Decompiled by Jad v1.5.8g. Copyright 2001 Pavel Kouznetsov.
+ // Jad home page: http://www.kpdus.com/jad.html
+ // Decompiler options: packimports(3) braces deadcode 
 @@ -7,6 +7,9 @@
  import java.net.*;
  import java.util.Random;
@@ -108,7 +113,7 @@ diff -u -r .\minecraft_original/net/minecraft/src/NetClientHandler.java .\minecr
 +   	
          netManager.networkShutdown("disconnect.kicked", new Object[0]);
          disconnected = true;
-         mc.func_6261_a(null);
+         mc.changeWorld1(null);
 @@ -337,6 +348,12 @@
          }
          if(entity != null)
@@ -120,7 +125,7 @@ diff -u -r .\minecraft_original/net/minecraft/src/NetClientHandler.java .\minecr
 +        	ModListener.getInstance().HandleEvent(e);
 +        	
              worldClient.playSoundAtEntity(entity, "random.pop", 0.2F, ((rand.nextFloat() - rand.nextFloat()) * 0.7F + 1.0F) * 2.0F);
-             mc.effectRenderer.func_1192_a(new EntityPickupFX(mc.theWorld, entity, ((Entity) (obj)), -0.5F));
+             mc.effectRenderer.addEffect(new EntityPickupFX(mc.theWorld, entity, ((Entity) (obj)), -0.5F));
              worldClient.removeEntityFromWorld(packet22collect.collectedEntityId);
 @@ -345,6 +362,12 @@
  
@@ -148,10 +153,14 @@ diff -u -r .\minecraft_original/net/minecraft/src/NetClientHandler.java .\minecr
          if(packet2handshake.username.equals("-"))
          {
              addToSendQueue(new Packet1Login(mc.session.playerName, "Password", 8));
-diff -u -r .\minecraft_original/net/minecraft/src/PlayerController.java .\minecraft/net/minecraft/src/PlayerController.java
---- .\minecraft_original/net/minecraft/src/PlayerController.java	Fri Feb 11 21:05:39 2011
-+++ .\minecraft/net/minecraft/src/PlayerController.java	Sat Feb 12 14:02:04 2011
-@@ -3,8 +3,13 @@
+Nur in ./minecraft/net/minecraft/src: NetClientHandler.java.orig.
+diff -ur ./minecraft_original/net/minecraft/src/PlayerController.java ./minecraft/net/minecraft/src/PlayerController.java
+--- ./minecraft_original/net/minecraft/src/PlayerController.java	2011-02-13 12:18:20.313333685 +0100
++++ ./minecraft/net/minecraft/src/PlayerController.java	2011-02-13 12:22:19.336667019 +0100
+@@ -1,10 +1,15 @@
+-package net.minecraft.src;
++package net.minecraft.src;
+ // Decompiled by Jad v1.5.8g. Copyright 2001 Pavel Kouznetsov.
  // Jad home page: http://www.kpdus.com/jad.html
  // Decompiler options: packimports(3) braces deadcode 
  
@@ -215,10 +224,13 @@ diff -u -r .\minecraft_original/net/minecraft/src/PlayerController.java .\minecr
          int i1 = world.getBlockId(i, j, k);
          if(i1 > 0 && Block.blocksList[i1].blockActivated(world, i, j, k, entityplayer))
          {
-diff -u -r .\minecraft_original/net/minecraft/src/PlayerControllerMP.java .\minecraft/net/minecraft/src/PlayerControllerMP.java
---- .\minecraft_original/net/minecraft/src/PlayerControllerMP.java	Fri Feb 11 21:05:39 2011
-+++ .\minecraft/net/minecraft/src/PlayerControllerMP.java	Sat Feb 12 13:58:16 2011
-@@ -3,6 +3,10 @@
+diff -ur ./minecraft_original/net/minecraft/src/PlayerControllerMP.java ./minecraft/net/minecraft/src/PlayerControllerMP.java
+--- ./minecraft_original/net/minecraft/src/PlayerControllerMP.java	2011-02-13 12:18:20.283333685 +0100
++++ ./minecraft/net/minecraft/src/PlayerControllerMP.java	2011-02-13 12:22:19.343333685 +0100
+@@ -1,8 +1,12 @@
+-package net.minecraft.src;
++package net.minecraft.src;
+ // Decompiled by Jad v1.5.8g. Copyright 2001 Pavel Kouznetsov.
  // Jad home page: http://www.kpdus.com/jad.html
  // Decompiler options: packimports(3) braces deadcode 
  
@@ -266,9 +278,15 @@ diff -u -r .\minecraft_original/net/minecraft/src/PlayerControllerMP.java .\mine
          func_730_e();
          field_9438_k.addToSendQueue(new Packet15Place(i, j, k, l, entityplayer.inventory.getCurrentItem()));
          boolean flag = super.sendPlaceBlock(entityplayer, world, itemstack, i, j, k, l);
-diff -u -r .\minecraft_original/net/minecraft/src/SoundManager.java .\minecraft/net/minecraft/src/SoundManager.java
---- .\minecraft_original/net/minecraft/src/SoundManager.java	Fri Feb 11 21:05:39 2011
-+++ .\minecraft/net/minecraft/src/SoundManager.java	Sun Feb 13 01:01:03 2011
+diff -ur ./minecraft_original/net/minecraft/src/SoundManager.java ./minecraft/net/minecraft/src/SoundManager.java
+--- ./minecraft_original/net/minecraft/src/SoundManager.java	2011-02-13 12:18:20.286667018 +0100
++++ ./minecraft/net/minecraft/src/SoundManager.java	2011-02-13 12:22:19.350000351 +0100
+@@ -1,4 +1,4 @@
+-package net.minecraft.src;
++package net.minecraft.src;
+ // Decompiled by Jad v1.5.8g. Copyright 2001 Pavel Kouznetsov.
+ // Jad home page: http://www.kpdus.com/jad.html
+ // Decompiler options: packimports(3) braces deadcode 
 @@ -234,7 +234,7 @@
          }
      }
