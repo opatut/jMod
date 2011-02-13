@@ -3,8 +3,17 @@ Minecraft mod for simple plugin loading and sharing.
 
 == Note for developers ==
 You have to decompile minecraft yourself (using the Minecraft Coder Pack MCP)
-and copy all minecraft sources to "src/minecraft/net/minecraft/client" and
-"src/minecraft/net/minecraft/src".
+and copy all minecraft sources to "src/minecraft_original/net/minecraft/client" and
+"src/minecraft_original/net/minecraft/src".
+
+For committing create the minecraft source files patch ("src/mc.patch") with
+the scripts "makepatch.bat" or "makepatch.sh".
+NEVER commit any original or modified minecraft files. Only commit the created
+patch file which contains the changes.
+
+After every GIT PULL execute "applypatch.bat" or "applypatch.sh" in the src/
+directory, so you receive the latest changes on all the original minecraft
+files.
 
 == Note for plugin developers ==
-Please wait until the official API is released.
+Please wait until the official API and Wiki is released.

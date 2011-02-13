@@ -1,0 +1,57 @@
+diff -ur ./minecraft_original/net/minecraft/client/Minecraft.java ./minecraft/net/minecraft/client/Minecraft.java
+--- ./minecraft_original/net/minecraft/client/Minecraft.java	2011-02-12 18:34:28.060000351 +0100
++++ ./minecraft/net/minecraft/client/Minecraft.java	2011-02-13 01:30:42.696667018 +0100
+@@ -86,6 +86,12 @@
+ import org.lwjgl.opengl.DisplayMode;
+ import org.lwjgl.util.glu.GLU;
+ 
++import JMod.Event;
++import JMod.EventType;
++import JMod.Plugin;
++import JMod.ModListener;
++import JMod.PluginLoader;
++
+ // Referenced classes of package net.minecraft.client:
+ //            MinecraftApplet
+ 
+@@ -95,6 +101,7 @@
+ 
+     public Minecraft(Component component, Canvas canvas, MinecraftApplet minecraftapplet, int i, int j, boolean flag)
+     {
++    	PluginLoader.getInstance();
+         fullscreen = false;
+         timer = new Timer(20F);
+         session = null;
+@@ -997,6 +1004,8 @@
+ 
+     public void runTick()
+     {
++    	ModListener.getInstance().HandleEvent(new JMod.Event(EventType.UpdateGame));
++    	
+         ingameGUI.func_555_a();
+         entityRenderer.getMouseOver(1.0F);
+         if(thePlayer != null)
+@@ -1503,7 +1512,7 @@
+             minecraftimpl.session = new Session(s3, s1);
+         } else
+         {
+-            minecraftimpl.session = new Session((new StringBuilder()).append("Player").append(System.currentTimeMillis() % 1000L).toString(), "");
++            minecraftimpl.session = new Session("Test1", "");
+         }
+         if(s2 != null)
+         {
+@@ -1528,7 +1537,7 @@
+ 
+     public static void main(String args[])
+     {
+-        String s = (new StringBuilder()).append("Player").append(System.currentTimeMillis() % 1000L).toString();
++        String s = "Test1";
+         if(args.length > 0)
+         {
+             s = args[0];
+@@ -1595,5 +1604,4 @@
+     public boolean isFancyGraphics;
+     long systemTime;
+     private int field_6300_ab;
+-
+ }
