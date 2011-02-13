@@ -16,7 +16,6 @@ import paulscode.sound.*;
 
 public class TestPlugin1 extends Plugin {
 	public void OnInitialize() {
-		System.out.println("Initializing TestPlugin #1");
 		try {
 			ModListener.getInstance().AddHook(EventType.UpdateGame, this, 
 					getClass().getDeclaredMethod("OnUpdate"));

@@ -6,6 +6,8 @@ import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import net.minecraft.client.Minecraft;
+
 
 /**
  * This class loads and manages all mods. 
@@ -17,41 +19,70 @@ public class PluginLoader {
 	private PluginLoader() {
 		mPlugins = new HashMap<String, Plugin>();
 		mAvailablePlugins = new ArrayList<File>();
-		
-		//PluginDownloader.getInstance().DownloadPlugin("TestPlugin1");
-		
+
 		RefreshPluginList();
-		if (!LoadPlugin("TestPlugin1")) {
-			System.out.println("Loading failed.");
-		} else {
-			EnablePlugin("TestPlugin1");
-		}
-		ModListener.getInstance().HandleEvent(new JMod.Event(EventType.UpdateGame));
+	}
+	
+	public void OnServerConnect(String[] required_plugins, String[] proposed_plugins) {
 		
 	}
 	
 	public void RefreshPluginList() {
 		mAvailablePlugins.clear();
-		File folder = new File("plugins");
+		File folder = new File(Minecraft.getMinecraftDir(), "plugins");
+		if(!folder.exists()) folder.mkdirs();
+		
 		File[] files = folder.listFiles();
 		for (File f: files) {	
 			if(f.isFile() && f.getName().toLowerCase().endsWith(".jar"))
 				mAvailablePlugins.add(f);
 		}
-		System.out.print("Refreshed list of available plugins:");
+		/*System.out.print("Refreshed list of available plugins:");
 		for(File s: mAvailablePlugins) {
 			System.out.print(" " + s.getName().replaceAll("\\.jar$", ""));
 		}
-		System.out.println();
+		System.out.println();*/
 	}
 	
-	// Get the singleton instance / create one if none exists
-	public static PluginLoader getInstance(){
-        if (INSTANCE == null) {
-        	INSTANCE = new PluginLoader();
-        }
-        return INSTANCE;
-    }
+	public void LoadEnabledPlugins() {
+		String[] en = new String[0];
+		en = ModOptions.getInstance().EnabledPlugins.toArray(en);
+		for(String s: en) {			
+			if(!IsPluginAvailable(s)) {
+				// if not available, download (and load/enable after download)
+				System.out.println("+ PluginLoader :: Plugin " + s + " not available. Downloading...");
+				PluginDownloader.getInstance().DownloadPlugin(s);
+			} else {
+				LoadAndEnablePlugin(s);
+			}
+		}
+	}
+	
+	public boolean IsPluginAvailable(String name) {
+		for(File f: mAvailablePlugins) {
+			if(f.getName().replaceAll("\\.jar$", "").equals(name))
+				return true;
+		}
+		return false;
+	}
+	
+	public static void createInstance() {
+		if(INSTANCE == null)
+			INSTANCE = new PluginLoader();
+	}
+	public static PluginLoader getInstance() {
+		return INSTANCE;
+	}
+	
+	public boolean LoadAndEnablePlugin(String name) {
+		if (LoadPlugin(name)) {
+			EnablePlugin(name);
+			return true;
+		} else {
+			DisablePlugin(name);
+		}
+		return false;
+	}
 	
 	public boolean LoadPlugin(String name) {
 		for(File f: mAvailablePlugins) {
@@ -61,10 +92,9 @@ public class PluginLoader {
 							new URL[]{f.toURI().toURL()});
 					
 					Plugin m = (Plugin) Class.forName(name, true, loader).newInstance();
-					System.out.println("Loading Plugin: " + m.GetName() + "...");
 					m.OnInitialize();
 					mPlugins.put(name, m);
-					System.out.println("Plugin " + m.GetName() + " loaded.");
+					System.out.println("+ PluginLoader :: Plugin " + m.GetName() + " loaded.");
 					return true;
 				} catch (Exception e) {
 					System.out.println("Could not create instance of class type " + name + ".");
@@ -79,6 +109,8 @@ public class PluginLoader {
 			mPlugins.get(name).mEnabled = true;
 			mPlugins.get(name).OnEnable();
 		}
+		if(!ModOptions.getInstance().EnabledPlugins.contains(name))
+			ModOptions.getInstance().EnabledPlugins.add(name);
 	}
 	
 	public void DisablePlugin(String name) {
@@ -86,6 +118,12 @@ public class PluginLoader {
 			mPlugins.get(name).mEnabled = false;
 			mPlugins.get(name).OnDisable();
 		}
+		if(ModOptions.getInstance().EnabledPlugins.contains(name))
+			ModOptions.getInstance().EnabledPlugins.remove(name);
+	}
+	
+	public void PluginDownloadFinished(String name) {
+		LoadAndEnablePlugin(name);
 	}
 	
 	public HashMap<String, Plugin> mPlugins;

@@ -4,6 +4,8 @@ import java.io.*;
 import java.net.URL;
 import java.util.HashMap;
 
+import net.minecraft.client.Minecraft;
+
 public class PluginDownloader {
 	// Make constructor private so this class can only be used
 	// via singleton
@@ -21,19 +23,26 @@ public class PluginDownloader {
     }
 	
 
+	public boolean DownloadPlugin(PluginConfig conf) {
+		try {
+			URL url = new URL(conf.GetProperty("download.source"));
+			String name = conf.GetProperty("general.name");
+			File file = new File(Minecraft.getMinecraftDir(), "plugins/" + name + ".jar");
+			PluginDownloaderThread t = new PluginDownloaderThread(name, url, file);
+			t.start();
+			mThreads.put(name,t);
+			return true;
+		} catch (IOException e) {
+			return false;
+		}
+	}
 	
 	public boolean DownloadPlugin(String name) {
 		try {
 			PluginConfig conf = new PluginConfig();
-			conf.LoadFromURL(new URL("http://opatut.dyndns.org:81/jmod/index.php/plugins/get/" + name));
-			URL url = new URL(conf.GetProperty("download.source"));
-			File file = new File("plugins/" + name + ".jar");
-			
-			PluginDownloaderThread t = new PluginDownloaderThread(url, file);
-			t.start();
-			mThreads.put(name,t);
-			
-			return true;
+			if (!conf.LoadFromURL(new URL("http://opatut.dyndns.org:81/jmod/index.php/plugins/get/" + name)))
+				return false;
+			return DownloadPlugin(conf);
 		} catch (IOException e) {
 			return false;
 		}

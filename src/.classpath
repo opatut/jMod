@@ -3,22 +3,22 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry excluding="paulscode/" kind="src" path="minecraft"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
-	<classpathentry kind="lib" path="minecraft/jinput.jar">
-		<attributes>
-			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="C:/src/jMod/src/minecraft/natives"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="minecraft/lwjgl_util.jar">
-		<attributes>
-			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="C:/src/jMod/src/minecraft/natives"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="minecraft/lwjgl.jar">
-		<attributes>
-			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="C:/src/jMod/src/minecraft/natives"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="minecraft/minecraft.jar"/>
 	<classpathentry kind="lib" path="ini4j-0.5.1.jar"/>
+	<classpathentry kind="lib" path="/home/paul/src/mcp/jars/bin/jinput.jar">
+		<attributes>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="/home/paul/src/mcp/jars/bin/natives"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="/home/paul/src/mcp/jars/bin/lwjgl.jar">
+		<attributes>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="/home/paul/src/mcp/jars/bin/natives"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="/home/paul/src/mcp/jars/bin/lwjgl_util.jar">
+		<attributes>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="/home/paul/src/mcp/jars/bin/natives"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="/home/paul/src/mcp/jars/bin/minecraft.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

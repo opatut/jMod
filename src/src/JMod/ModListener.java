@@ -7,20 +7,16 @@ import net.minecraft.client.Minecraft;
 
 
 public class ModListener {
-	// Make constructor private so this class can only be used
-	// via singleton
 	private ModListener() {
 		mHooks = new ArrayList<Hook>();
 	}
-	
-	// Get the singleton instance / create one if none exists
+	public static void createInstance() {
+		if(INSTANCE == null)
+			INSTANCE = new ModListener();
+	}
 	public static ModListener getInstance() {
-        if (INSTANCE == null) {
-        	INSTANCE = new ModListener();
-        }
-        
-        return INSTANCE;
-    }
+		return INSTANCE;
+	}
 	
 	public void AddHook(Hook hook) {
 		mHooks.add(hook);
@@ -45,7 +41,6 @@ public class ModListener {
 	}
 	
 	public void HandleEvent(Event event) {
-		
 		for(Hook h: mHooks) {
 			if(h.mEventType == event.mType) {
 				h.Invoke(event);

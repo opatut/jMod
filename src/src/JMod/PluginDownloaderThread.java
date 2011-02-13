@@ -5,10 +5,11 @@ import java.net.URL;
 
 public class PluginDownloaderThread extends Thread{
 	
-	public PluginDownloaderThread(URL url, File destination) {
+	public PluginDownloaderThread(String name, URL url, File destination) {
 		mCancelDownload = false;
 		setName("Plugin download thread");
 		setDaemon(true);
+		mName = name;
 		mURL = url;
 		mDestination = destination;
 	}
@@ -30,10 +31,14 @@ public class PluginDownloaderThread extends Thread{
 	        }
 	        in.close();
 	        out.close();
+	        
+	        PluginLoader.getInstance().RefreshPluginList();
+	        PluginLoader.getInstance().PluginDownloadFinished(mName);
 		} catch(IOException e) {}
 	}
 	
 	private URL mURL;
 	private File mDestination;
 	private boolean mCancelDownload;
+	private String mName;
 }
