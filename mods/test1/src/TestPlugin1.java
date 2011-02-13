@@ -1,11 +1,9 @@
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.HashMap;
 
-import JMod.EventType;
-import JMod.JoinServerGuiScreen;
-import JMod.ModListener;
-import JMod.Plugin;
+import JMod.*;
 import net.minecraft.src.GuiInventory;
 import net.minecraft.src.SoundManager;
 
@@ -16,6 +14,7 @@ import paulscode.sound.*;
 
 public class TestPlugin1 extends Plugin {
 	public void OnInitialize() {
+		System.out.println("Initializing Testplugin1");
 		try {
 			ModListener.getInstance().AddHook(EventType.UpdateGame, this, 
 					getClass().getDeclaredMethod("OnUpdate"));
@@ -79,7 +78,11 @@ public class TestPlugin1 extends Plugin {
 	public void OnKeyPressed(int key) {
 		if(key == Keyboard.KEY_E){
 			
-			ModListener.getInstance().mc.displayGuiScreen(new JoinServerGuiScreen());
+			ModListener.getInstance().mc.displayGuiScreen(
+					new PluginListGuiScreen(PluginListGuiScreen.Mode.Manage, 
+							PluginLoader.getInstance().mInstalledPlugins));
+		
+			System.out.println("Pressed E");
 			
 			//SoundSystem sound = SoundManager.sndSystem;
 			//try {

@@ -32,7 +32,7 @@ public class PluginDownloaderThread extends Thread{
 	        in.close();
 	        out.close();
 	        
-	        PluginLoader.getInstance().RefreshPluginList();
+	        PluginLoader.getInstance().RefreshInstalledPluginList();
 	        PluginLoader.getInstance().PluginDownloadFinished(mName);
 		} catch(IOException e) {}
 	}

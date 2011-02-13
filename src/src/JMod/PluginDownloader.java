@@ -1,6 +1,7 @@
 package JMod;
 
 import java.io.*;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
 
@@ -27,7 +28,9 @@ public class PluginDownloader {
 		try {
 			URL url = new URL(conf.GetProperty("download.source"));
 			String name = conf.GetProperty("general.name");
-			File file = new File(Minecraft.getMinecraftDir(), "plugins/" + name + ".jar");
+			File file = new File(Minecraft.getMinecraftDir(), 
+					"plugins/" + name + "-" + conf.GetProperty("general.config_version") + "/plugin.jar");
+			file.getParentFile().mkdirs();
 			PluginDownloaderThread t = new PluginDownloaderThread(name, url, file);
 			t.start();
 			mThreads.put(name,t);
@@ -37,12 +40,22 @@ public class PluginDownloader {
 		}
 	}
 	
+	public PluginConfig DownloadPluginConfig(String name) throws IOException {
+		URL url = new URL("http://opatut.dyndns.org:81/jmod/index.php/plugins/get/" + name);
+		
+		PluginConfig conf = new PluginConfig();
+		conf.LoadFromURL(url);
+		
+        File file = new File(Minecraft.getMinecraftDir(), "plugins/" + name + "-" + conf.GetProperty("general.config_version") + "/plugin.config");
+        file.getParentFile().mkdirs();
+        conf.SaveToFile(file);
+        
+		return conf;
+	}
+	
 	public boolean DownloadPlugin(String name) {
 		try {
-			PluginConfig conf = new PluginConfig();
-			if (!conf.LoadFromURL(new URL("http://opatut.dyndns.org:81/jmod/index.php/plugins/get/" + name)))
-				return false;
-			return DownloadPlugin(conf);
+			return DownloadPlugin(DownloadPluginConfig(name));
 		} catch (IOException e) {
 			return false;
 		}

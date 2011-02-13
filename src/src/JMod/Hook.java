@@ -5,8 +5,9 @@ import java.util.logging.Logger;
 
 public class Hook {
 	public void Invoke(Event e) {
-		if(!mPlugin.mEnabled)
+		if(!mPlugin.mEnabled) {
 			return;
+		}
 		
 		try {
 			switch(e.mType){
