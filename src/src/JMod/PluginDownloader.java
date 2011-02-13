@@ -24,7 +24,9 @@ public class PluginDownloader {
 	
 	public boolean DownloadPlugin(String name) {
 		try {
-			URL url = new URL("http://opatut.dyndns.org:81/jmod/get/" + name);
+			PluginConfig conf = new PluginConfig();
+			conf.LoadFromURL(new URL("http://opatut.dyndns.org:81/jmod/index.php/plugins/get/" + name));
+			URL url = new URL(conf.GetProperty("download.source"));
 			File file = new File("plugins/" + name + ".jar");
 			
 			PluginDownloaderThread t = new PluginDownloaderThread(url, file);
