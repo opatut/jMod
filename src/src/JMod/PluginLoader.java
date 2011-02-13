@@ -16,7 +16,9 @@ public class PluginLoader {
 	private PluginLoader() {
 		mPlugins = new HashMap<String, Plugin>();
 		mAvailablePlugins = new ArrayList<File>();
-		System.out.println(System.getProperty("java.library.path"));
+		
+		PluginDownloader.getInstance().DownloadPlugin("TestPlugin1");
+		
 		RefreshPluginList();
 		if (!LoadPlugin("TestPlugin1")) {
 			System.out.println("Loading failed.");
