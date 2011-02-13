@@ -9,7 +9,4 @@ public class ModManager {
 		PluginLoader.createInstance();
 		PluginLoader.getInstance().LoadEnabledPlugins();
 	}
-	
-	public static void AfterInitialization() {
-	}
 }
