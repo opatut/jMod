@@ -1,298 +1,298 @@
-diff -ur ./minecraft_original/net/minecraft/client/Minecraft.java ./minecraft/net/minecraft/client/Minecraft.java
---- ./minecraft_original/net/minecraft/client/Minecraft.java	2011-02-13 12:18:20.320000352 +0100
-+++ ./minecraft/net/minecraft/client/Minecraft.java	2011-02-13 12:26:29.330000351 +0100
+diff -u -r .\minecraft_original/net/minecraft/client/Minecraft.java .\minecraft/net/minecraft/client/Minecraft.java
+--- .\minecraft_original/net/minecraft/client/Minecraft.java	Sun Feb 13 12:18:20 2011
++++ .\minecraft/net/minecraft/client/Minecraft.java	Sun Feb 13 12:26:29 2011
 @@ -2,8 +2,14 @@
- // Jad home page: http://www.kpdus.com/jad.html
- // Decompiler options: packimports(3) braces deadcode 
- 
-+// this is a test comment
-+
- package net.minecraft.client;
- 
-+import JMod.EventType;
-+import JMod.ModListener;
-+import JMod.PluginLoader;
-+
- import net.minecraft.src.AxisAlignedBB;
- import net.minecraft.src.Block;
- import net.minecraft.src.BlockGrass;
+ // Jad home page: http://www.kpdus.com/jad.html
+ // Decompiler options: packimports(3) braces deadcode 
+ 
++// this is a test comment
++
+ package net.minecraft.client;
+ 
++import JMod.EventType;
++import JMod.ModListener;
++import JMod.PluginLoader;
++
+ import net.minecraft.src.AxisAlignedBB;
+ import net.minecraft.src.Block;
+ import net.minecraft.src.BlockGrass;
 @@ -86,6 +92,7 @@
- import org.lwjgl.opengl.DisplayMode;
- import org.lwjgl.util.glu.GLU;
- 
-+
- // Referenced classes of package net.minecraft.client:
- //            MinecraftApplet
- 
+ import org.lwjgl.opengl.DisplayMode;
+ import org.lwjgl.util.glu.GLU;
+ 
++
+ // Referenced classes of package net.minecraft.client:
+ //            MinecraftApplet
+ 
 @@ -95,6 +102,8 @@
- 
-     public Minecraft(Component component, Canvas canvas, MinecraftApplet minecraftapplet, int i, int j, boolean flag)
-     {
-+    	PluginLoader.getInstance();
-+    	ModListener.getInstance().mc = this;
-         fullscreen = false;
-         timer = new Timer(20F);
-         session = null;
+ 
+     public Minecraft(Component component, Canvas canvas, MinecraftApplet minecraftapplet, int i, int j, boolean flag)
+     {
++    	PluginLoader.getInstance();
++    	ModListener.getInstance().mc = this;
+         fullscreen = false;
+         timer = new Timer(20F);
+         session = null;
 @@ -818,6 +827,7 @@
- 
-     private void clickMouse(int i)
-     {
-+    	
-         if(i == 0 && field_6282_S > 0)
-         {
-             return;
+ 
+     private void clickMouse(int i)
+     {
++    	
+         if(i == 0 && field_6282_S > 0)
+         {
+             return;
 @@ -997,6 +1007,7 @@
- 
-     public void runTick()
-     {
-+    	ModListener.getInstance().HandleEvent(new JMod.Event(EventType.UpdateGame));
-         ingameGUI.func_555_a();
-         entityRenderer.getMouseOver(1.0F);
-         if(thePlayer != null)
+ 
+     public void runTick()
+     {
++    	ModListener.getInstance().HandleEvent(new JMod.Event(EventType.UpdateGame));
+         ingameGUI.func_555_a();
+         entityRenderer.getMouseOver(1.0F);
+         if(thePlayer != null)
 @@ -1091,7 +1102,21 @@
-                 {
-                     break;
-                 }
-+               
-                 thePlayer.handleKeyPress(Keyboard.getEventKey(), Keyboard.getEventKeyState());
-+                
-+                if(Keyboard.getEventKeyState()){
-+                	JMod.Event keyEvent;
-+                	keyEvent = new JMod.Event(EventType.KeyPressed);
-+                	keyEvent.AddData(Keyboard.getEventKey());
-+                	ModListener.getInstance().HandleEvent(keyEvent);
-+                } else if(!Keyboard.getEventKeyState()) {
-+                	JMod.Event keyEvent;
-+                	keyEvent = new JMod.Event(EventType.KeyReleased);
-+                	keyEvent.AddData(Keyboard.getEventKey());
-+                	ModListener.getInstance().HandleEvent(keyEvent);
-+                }
-+               
-                 if(Keyboard.getEventKeyState())
-                 {
-                     if(Keyboard.getEventKey() == 87)
-Nur in ./minecraft/net/minecraft/client: Minecraft.java.orig.
-Nur in ./minecraft/net/minecraft/client: Minecraft.java.rej.
-diff -ur ./minecraft_original/net/minecraft/src/NetClientHandler.java ./minecraft/net/minecraft/src/NetClientHandler.java
---- ./minecraft_original/net/minecraft/src/NetClientHandler.java	2011-02-13 12:18:20.293333685 +0100
-+++ ./minecraft/net/minecraft/src/NetClientHandler.java	2011-02-13 12:22:19.316667019 +0100
+                 {
+                     break;
+                 }
++               
+                 thePlayer.handleKeyPress(Keyboard.getEventKey(), Keyboard.getEventKeyState());
++                
++                if(Keyboard.getEventKeyState()){
++                	JMod.Event keyEvent;
++                	keyEvent = new JMod.Event(EventType.KeyPressed);
++                	keyEvent.AddData(Keyboard.getEventKey());
++                	ModListener.getInstance().HandleEvent(keyEvent);
++                } else if(!Keyboard.getEventKeyState()) {
++                	JMod.Event keyEvent;
++                	keyEvent = new JMod.Event(EventType.KeyReleased);
++                	keyEvent.AddData(Keyboard.getEventKey());
++                	ModListener.getInstance().HandleEvent(keyEvent);
++                }
++               
+                 if(Keyboard.getEventKeyState())
+                 {
+                     if(Keyboard.getEventKey() == 87)
+Only in .\minecraft/net/minecraft/client: Minecraft.java.orig
+Only in .\minecraft/net/minecraft/client: Minecraft.java.rej
+diff -u -r .\minecraft_original/net/minecraft/src/NetClientHandler.java .\minecraft/net/minecraft/src/NetClientHandler.java
+--- .\minecraft_original/net/minecraft/src/NetClientHandler.java	Sun Feb 13 12:18:20 2011
++++ .\minecraft/net/minecraft/src/NetClientHandler.java	Sun Feb 13 12:22:19 2011
 @@ -1,4 +1,4 @@
 -package net.minecraft.src;
-+package net.minecraft.src;
- // Decompiled by Jad v1.5.8g. Copyright 2001 Pavel Kouznetsov.
- // Jad home page: http://www.kpdus.com/jad.html
- // Decompiler options: packimports(3) braces deadcode 
++package net.minecraft.src;
+ // Decompiled by Jad v1.5.8g. Copyright 2001 Pavel Kouznetsov.
+ // Jad home page: http://www.kpdus.com/jad.html
+ // Decompiler options: packimports(3) braces deadcode 
 @@ -7,6 +7,9 @@
- import java.net.*;
- import java.util.Random;
- import net.minecraft.client.Minecraft;
-+import JMod.Event;
-+import JMod.EventType;
-+import JMod.ModListener;
- 
- public class NetClientHandler extends NetHandler
- {
+ import java.net.*;
+ import java.util.Random;
+ import net.minecraft.client.Minecraft;
++import JMod.Event;
++import JMod.EventType;
++import JMod.ModListener;
+ 
+ public class NetClientHandler extends NetHandler
+ {
 @@ -35,6 +38,11 @@
- 
-     public void handleLogin(Packet1Login packet1login)
-     {
-+    	JMod.Event e;
-+    	e = new JMod.Event(EventType.AfterLogin);
-+    	e.AddData(packet1login.protocolVersion);
-+    	ModListener.getInstance().HandleEvent(e);
-+    	
-         mc.playerController = new PlayerControllerMP(mc, this);
-         worldClient = new WorldClient(this, packet1login.field_4074_d, packet1login.field_4073_e);
-         worldClient.multiplayerWorld = true;
+ 
+     public void handleLogin(Packet1Login packet1login)
+     {
++    	JMod.Event e;
++    	e = new JMod.Event(EventType.AfterLogin);
++    	e.AddData(packet1login.protocolVersion);
++    	ModListener.getInstance().HandleEvent(e);
++    	
+         mc.playerController = new PlayerControllerMP(mc, this);
+         worldClient = new WorldClient(this, packet1login.field_4074_d, packet1login.field_4073_e);
+         worldClient.multiplayerWorld = true;
 @@ -293,6 +301,9 @@
- 
-     public void handleKickDisconnect(Packet255KickDisconnect packet255kickdisconnect)
-     {
-+
-+   	 	ModListener.getInstance().HandleEvent(new JMod.Event(EventType.Kicked));
-+   	
-         netManager.networkShutdown("disconnect.kicked", new Object[0]);
-         disconnected = true;
-         mc.changeWorld1(null);
+ 
+     public void handleKickDisconnect(Packet255KickDisconnect packet255kickdisconnect)
+     {
++
++   	 	ModListener.getInstance().HandleEvent(new JMod.Event(EventType.Kicked));
++   	
+         netManager.networkShutdown("disconnect.kicked", new Object[0]);
+         disconnected = true;
+         mc.changeWorld1(null);
 @@ -337,6 +348,12 @@
-         }
-         if(entity != null)
-         {
-+        	JMod.Event e;
-+        	e = new JMod.Event(EventType.CollectItem);
-+        	e.AddData(entity);
-+        	e.AddData(obj);
-+        	ModListener.getInstance().HandleEvent(e);
-+        	
-             worldClient.playSoundAtEntity(entity, "random.pop", 0.2F, ((rand.nextFloat() - rand.nextFloat()) * 0.7F + 1.0F) * 2.0F);
-             mc.effectRenderer.addEffect(new EntityPickupFX(mc.theWorld, entity, ((Entity) (obj)), -0.5F));
-             worldClient.removeEntityFromWorld(packet22collect.collectedEntityId);
+         }
+         if(entity != null)
+         {
++        	JMod.Event e;
++        	e = new JMod.Event(EventType.CollectItem);
++        	e.AddData(entity);
++        	e.AddData(obj);
++        	ModListener.getInstance().HandleEvent(e);
++        	
+             worldClient.playSoundAtEntity(entity, "random.pop", 0.2F, ((rand.nextFloat() - rand.nextFloat()) * 0.7F + 1.0F) * 2.0F);
+             mc.effectRenderer.addEffect(new EntityPickupFX(mc.theWorld, entity, ((Entity) (obj)), -0.5F));
+             worldClient.removeEntityFromWorld(packet22collect.collectedEntityId);
 @@ -345,6 +362,12 @@
- 
-     public void handleChat(Packet3Chat packet3chat)
-     {
-+    	//New chat message
-+    	JMod.Event e;
-+    	e = new JMod.Event(EventType.MessageReceived);
-+    	e.AddData(packet3chat.message);
-+    	ModListener.getInstance().HandleEvent(e);
-+    	
-         mc.ingameGUI.addChatMessage(packet3chat.message);
-     }
- 
+ 
+     public void handleChat(Packet3Chat packet3chat)
+     {
++    	//New chat message
++    	JMod.Event e;
++    	e = new JMod.Event(EventType.MessageReceived);
++    	e.AddData(packet3chat.message);
++    	ModListener.getInstance().HandleEvent(e);
++    	
+         mc.ingameGUI.addChatMessage(packet3chat.message);
+     }
+ 
 @@ -368,6 +391,12 @@
- 
-     public void handleHandshake(Packet2Handshake packet2handshake)
-     {
-+    	//Server handshake event
-+    	JMod.Event e;
-+    	e = new JMod.Event(EventType.ServerHandshake);
-+    	e.AddData(packet2handshake.username);
-+    	ModListener.getInstance().HandleEvent(e);
-+    	
-         if(packet2handshake.username.equals("-"))
-         {
-             addToSendQueue(new Packet1Login(mc.session.playerName, "Password", 8));
-Nur in ./minecraft/net/minecraft/src: NetClientHandler.java.orig.
-diff -ur ./minecraft_original/net/minecraft/src/PlayerController.java ./minecraft/net/minecraft/src/PlayerController.java
---- ./minecraft_original/net/minecraft/src/PlayerController.java	2011-02-13 12:18:20.313333685 +0100
-+++ ./minecraft/net/minecraft/src/PlayerController.java	2011-02-13 12:22:19.336667019 +0100
+ 
+     public void handleHandshake(Packet2Handshake packet2handshake)
+     {
++    	//Server handshake event
++    	JMod.Event e;
++    	e = new JMod.Event(EventType.ServerHandshake);
++    	e.AddData(packet2handshake.username);
++    	ModListener.getInstance().HandleEvent(e);
++    	
+         if(packet2handshake.username.equals("-"))
+         {
+             addToSendQueue(new Packet1Login(mc.session.playerName, "Password", 8));
+Only in .\minecraft/net/minecraft/src: NetClientHandler.java.orig
+diff -u -r .\minecraft_original/net/minecraft/src/PlayerController.java .\minecraft/net/minecraft/src/PlayerController.java
+--- .\minecraft_original/net/minecraft/src/PlayerController.java	Sun Feb 13 12:18:20 2011
++++ .\minecraft/net/minecraft/src/PlayerController.java	Sun Feb 13 12:22:19 2011
 @@ -1,10 +1,15 @@
 -package net.minecraft.src;
-+package net.minecraft.src;
- // Decompiled by Jad v1.5.8g. Copyright 2001 Pavel Kouznetsov.
- // Jad home page: http://www.kpdus.com/jad.html
- // Decompiler options: packimports(3) braces deadcode 
- 
-+import org.lwjgl.input.Keyboard;
-+
-+import JMod.EventType;
-+import JMod.ModListener;
- import net.minecraft.client.Minecraft;
- 
-+
- public class PlayerController
- {
- 
++package net.minecraft.src;
+ // Decompiled by Jad v1.5.8g. Copyright 2001 Pavel Kouznetsov.
+ // Jad home page: http://www.kpdus.com/jad.html
+ // Decompiler options: packimports(3) braces deadcode 
+ 
++import org.lwjgl.input.Keyboard;
++
++import JMod.EventType;
++import JMod.ModListener;
+ import net.minecraft.client.Minecraft;
+ 
++
+ public class PlayerController
+ {
+ 
 @@ -20,6 +25,11 @@
- 
-     public void clickBlock(int i, int j, int k, int l)
-     {
-+    	JMod.Event keyEvent;
-+    	keyEvent = new JMod.Event(EventType.KeyPressed);
-+    	keyEvent.AddData(Keyboard.getEventKey());
-+    	ModListener.getInstance().HandleEvent(keyEvent);
-+    	
-         sendBlockRemoved(i, j, k, l);
-     }
- 
+ 
+     public void clickBlock(int i, int j, int k, int l)
+     {
++    	JMod.Event keyEvent;
++    	keyEvent = new JMod.Event(EventType.KeyPressed);
++    	keyEvent.AddData(Keyboard.getEventKey());
++    	ModListener.getInstance().HandleEvent(keyEvent);
++    	
+         sendBlockRemoved(i, j, k, l);
+     }
+ 
 @@ -92,6 +102,37 @@
- 
-     public boolean sendPlaceBlock(EntityPlayer entityplayer, World world, ItemStack itemstack, int i, int j, int k, int l)
-     {
-+    	
-+    	if(itemstack != null){
-+        	int posX = i;
-+        	int posY = j;
-+        	int posZ = k;
-+        	
-+        	if(l == 0) {
-+        		posY -= 1;
-+        	}else if(l == 1) {
-+        		posY += 1;
-+        	}else if(l == 2){
-+        		posZ -= 1;
-+        	}else if(l == 3){
-+        		posZ += 1;
-+        	}else if(l == 4){
-+        		posX -= 1;
-+        	}else if(l == 5){
-+        		posX += 1;
-+        	}
-+        	
-+        	JMod.Event placeEvent;
-+        	placeEvent = new JMod.Event(EventType.BlockPlaced);
-+        	placeEvent.AddData(itemstack.itemID);
-+        	
-+        	placeEvent.AddData(posX);
-+        	placeEvent.AddData(posY);
-+        	placeEvent.AddData(posZ);
-+
-+        	ModListener.getInstance().HandleEvent(placeEvent);
-+        	}
-+    	
-         int i1 = world.getBlockId(i, j, k);
-         if(i1 > 0 && Block.blocksList[i1].blockActivated(world, i, j, k, entityplayer))
-         {
-diff -ur ./minecraft_original/net/minecraft/src/PlayerControllerMP.java ./minecraft/net/minecraft/src/PlayerControllerMP.java
---- ./minecraft_original/net/minecraft/src/PlayerControllerMP.java	2011-02-13 12:18:20.283333685 +0100
-+++ ./minecraft/net/minecraft/src/PlayerControllerMP.java	2011-02-13 12:22:19.343333685 +0100
+ 
+     public boolean sendPlaceBlock(EntityPlayer entityplayer, World world, ItemStack itemstack, int i, int j, int k, int l)
+     {
++    	
++    	if(itemstack != null){
++        	int posX = i;
++        	int posY = j;
++        	int posZ = k;
++        	
++        	if(l == 0) {
++        		posY -= 1;
++        	}else if(l == 1) {
++        		posY += 1;
++        	}else if(l == 2){
++        		posZ -= 1;
++        	}else if(l == 3){
++        		posZ += 1;
++        	}else if(l == 4){
++        		posX -= 1;
++        	}else if(l == 5){
++        		posX += 1;
++        	}
++        	
++        	JMod.Event placeEvent;
++        	placeEvent = new JMod.Event(EventType.BlockPlaced);
++        	placeEvent.AddData(itemstack.itemID);
++        	
++        	placeEvent.AddData(posX);
++        	placeEvent.AddData(posY);
++        	placeEvent.AddData(posZ);
++
++        	ModListener.getInstance().HandleEvent(placeEvent);
++        	}
++    	
+         int i1 = world.getBlockId(i, j, k);
+         if(i1 > 0 && Block.blocksList[i1].blockActivated(world, i, j, k, entityplayer))
+         {
+diff -u -r .\minecraft_original/net/minecraft/src/PlayerControllerMP.java .\minecraft/net/minecraft/src/PlayerControllerMP.java
+--- .\minecraft_original/net/minecraft/src/PlayerControllerMP.java	Sun Feb 13 12:18:20 2011
++++ .\minecraft/net/minecraft/src/PlayerControllerMP.java	Sun Feb 13 12:22:19 2011
 @@ -1,8 +1,12 @@
 -package net.minecraft.src;
-+package net.minecraft.src;
- // Decompiled by Jad v1.5.8g. Copyright 2001 Pavel Kouznetsov.
- // Jad home page: http://www.kpdus.com/jad.html
- // Decompiler options: packimports(3) braces deadcode 
- 
-+import org.lwjgl.input.Keyboard;
-+
-+import JMod.EventType;
-+import JMod.ModListener;
- import net.minecraft.client.Minecraft;
- 
- public class PlayerControllerMP extends PlayerController
++package net.minecraft.src;
+ // Decompiled by Jad v1.5.8g. Copyright 2001 Pavel Kouznetsov.
+ // Jad home page: http://www.kpdus.com/jad.html
+ // Decompiler options: packimports(3) braces deadcode 
+ 
++import org.lwjgl.input.Keyboard;
++
++import JMod.EventType;
++import JMod.ModListener;
+ import net.minecraft.client.Minecraft;
+ 
+ public class PlayerControllerMP extends PlayerController
 @@ -162,6 +166,36 @@
- 
-     public boolean sendPlaceBlock(EntityPlayer entityplayer, World world, ItemStack itemstack, int i, int j, int k, int l)
-     {
-+    	if(itemstack != null){
-+    	int posX = i;
-+    	int posY = j;
-+    	int posZ = k;
-+    	
-+    	if(l == 0) {
-+    		posY -= 1;
-+    	}else if(l == 1) {
-+    		posY += 1;
-+    	}else if(l == 2){
-+    		posZ -= 1;
-+    	}else if(l == 3){
-+    		posZ += 1;
-+    	}else if(l == 4){
-+    		posX -= 1;
-+    	}else if(l == 5){
-+    		posX += 1;
-+    	}
-+    	
-+    	JMod.Event placeEvent;
-+    	placeEvent = new JMod.Event(EventType.BlockPlaced);
-+    	placeEvent.AddData(itemstack.itemID);
-+    	
-+    	placeEvent.AddData(posX);
-+    	placeEvent.AddData(posY);
-+    	placeEvent.AddData(posZ);
-+
-+    	ModListener.getInstance().HandleEvent(placeEvent);
-+    	}
-+    	
-         func_730_e();
-         field_9438_k.addToSendQueue(new Packet15Place(i, j, k, l, entityplayer.inventory.getCurrentItem()));
-         boolean flag = super.sendPlaceBlock(entityplayer, world, itemstack, i, j, k, l);
-diff -ur ./minecraft_original/net/minecraft/src/SoundManager.java ./minecraft/net/minecraft/src/SoundManager.java
---- ./minecraft_original/net/minecraft/src/SoundManager.java	2011-02-13 12:18:20.286667018 +0100
-+++ ./minecraft/net/minecraft/src/SoundManager.java	2011-02-13 12:22:19.350000351 +0100
+ 
+     public boolean sendPlaceBlock(EntityPlayer entityplayer, World world, ItemStack itemstack, int i, int j, int k, int l)
+     {
++    	if(itemstack != null){
++    	int posX = i;
++    	int posY = j;
++    	int posZ = k;
++    	
++    	if(l == 0) {
++    		posY -= 1;
++    	}else if(l == 1) {
++    		posY += 1;
++    	}else if(l == 2){
++    		posZ -= 1;
++    	}else if(l == 3){
++    		posZ += 1;
++    	}else if(l == 4){
++    		posX -= 1;
++    	}else if(l == 5){
++    		posX += 1;
++    	}
++    	
++    	JMod.Event placeEvent;
++    	placeEvent = new JMod.Event(EventType.BlockPlaced);
++    	placeEvent.AddData(itemstack.itemID);
++    	
++    	placeEvent.AddData(posX);
++    	placeEvent.AddData(posY);
++    	placeEvent.AddData(posZ);
++
++    	ModListener.getInstance().HandleEvent(placeEvent);
++    	}
++    	
+         func_730_e();
+         field_9438_k.addToSendQueue(new Packet15Place(i, j, k, l, entityplayer.inventory.getCurrentItem()));
+         boolean flag = super.sendPlaceBlock(entityplayer, world, itemstack, i, j, k, l);
+diff -u -r .\minecraft_original/net/minecraft/src/SoundManager.java .\minecraft/net/minecraft/src/SoundManager.java
+--- .\minecraft_original/net/minecraft/src/SoundManager.java	Sun Feb 13 12:18:20 2011
++++ .\minecraft/net/minecraft/src/SoundManager.java	Sun Feb 13 12:22:19 2011
 @@ -1,4 +1,4 @@
 -package net.minecraft.src;
-+package net.minecraft.src;
- // Decompiled by Jad v1.5.8g. Copyright 2001 Pavel Kouznetsov.
- // Jad home page: http://www.kpdus.com/jad.html
- // Decompiler options: packimports(3) braces deadcode 
++package net.minecraft.src;
+ // Decompiled by Jad v1.5.8g. Copyright 2001 Pavel Kouznetsov.
+ // Jad home page: http://www.kpdus.com/jad.html
+ // Decompiler options: packimports(3) braces deadcode 
 @@ -234,7 +234,7 @@
-         }
-     }
- 
--    private static SoundSystem sndSystem;
-+    public static SoundSystem sndSystem;
-     private SoundPool soundPoolSounds;
-     private SoundPool soundPoolStreaming;
-     private SoundPool soundPoolMusic;
+         }
+     }
+ 
+-    private static SoundSystem sndSystem;
++    public static SoundSystem sndSystem;
+     private SoundPool soundPoolSounds;
+     private SoundPool soundPoolStreaming;
+     private SoundPool soundPoolMusic;
