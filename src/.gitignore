@@ -4,3 +4,5 @@ minecraft/
 minecraft_server/
 minecraft_original/
 *.classpath
+
+*.classpath
