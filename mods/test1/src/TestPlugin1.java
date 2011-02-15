@@ -78,10 +78,8 @@ public class TestPlugin1 extends Plugin {
 	public void OnKeyPressed(int key) {
 		if(key == Keyboard.KEY_E){
 			
-			ModListener.getInstance().mc.displayGuiScreen(
-					new PluginListGuiScreen(PluginListGuiScreen.Mode.Manage, 
-							PluginLoader.getInstance().mInstalledPlugins));
-		
+			PluginListGuiScreen.CreateManageScreen();
+					
 			System.out.println("Pressed E");
 			
 			//SoundSystem sound = SoundManager.sndSystem;

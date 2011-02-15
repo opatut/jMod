@@ -2,10 +2,16 @@ package JMod;
 
 import java.io.File;
 import java.io.FilenameFilter;
+import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map.Entry;
+
+import org.ini4j.Ini;
+import org.ini4j.InvalidFileFormatException;
 
 import net.minecraft.client.Minecraft;
 
@@ -54,6 +60,30 @@ public class PluginLoader {
 				}
 			}
 		}
+	}
+	
+	public HashMap<String, PluginInfo> SearchForPlugins(PluginSearchQuery query) {
+		HashMap<String, PluginInfo> list = new HashMap<String, PluginInfo>();
+		Ini ini = new Ini();
+		try {
+			ini.load(new URL(String.format(PluginDownloader.SEARCH_URL, query.mSearchString)));
+			if(ini.containsKey("RESULTS")) {
+				for(Entry<String, String> e: ini.get("RESULTS").entrySet()) {
+					list.put(e.getKey(), new PluginInfo(e.getKey(), null));
+				}
+			} else if(ini.containsKey("ERROR")) {
+				int code = Integer.parseInt(ini.get("ERROR").get("code"));
+				if(code == 204) {
+					// don't do anything. there is just no result.
+				} else {
+					throw new IOException(ini.get("ERROR").get("desc"));
+				}
+			}
+		} catch (IOException e) {
+			System.err.println("Could not search for plugin: " + e.getMessage());
+			e.printStackTrace();
+		}
+		return list;
 	}
 	
 	public void LoadEnabledPlugins() {
