@@ -11,15 +11,23 @@ public class PluginInfo {
 		
 		try {
 			mLatestConfig = PluginDownloader.getInstance().DownloadPluginConfig(name);
-			mCurrentConfig = new PluginConfig();
-			mCurrentConfig.LoadFromURL(current_config.toURI().toURL());
 			
-			if (!mCurrentConfig.GetProperty("general.name").equals(mLatestConfig.GetProperty("general.name"))) { 
-				System.err.println("Fatal Error: Current and latest config plugin name do not match.");
-				System.err.println("> Requested: " + name);
-				System.err.println("> Current:   " + mCurrentConfig.GetProperty("general.name"));
-				System.err.println("> Latest:    " + mLatestConfig.GetProperty("general.name"));
-				System.exit(1);
+			if(current_config != null && current_config.exists()) {
+				mCurrentConfig = new PluginConfig();
+				mCurrentConfig.LoadFromURL(current_config.toURI().toURL());
+				
+				if (!mCurrentConfig.GetProperty("general.name").equals(mLatestConfig.GetProperty("general.name"))) { 
+					System.err.println("Fatal Error: Current and latest config plugin name do not match.");
+					System.err.println("> Requested: " + name);
+					System.err.println("> Current:   " + mCurrentConfig.GetProperty("general.name"));
+					System.err.println("> Latest:    " + mLatestConfig.GetProperty("general.name"));
+					System.exit(1);
+				} else {
+					mInstalled = true;
+				}
+			} else {
+				// pretend the plugin is not installed
+				mInstalled = false;
 			}
 		} catch (IOException e) {
 			System.out.println("Could not create PluginInfo: config file not found or download failed.");
@@ -35,14 +43,16 @@ public class PluginInfo {
 	}
 	
 	public boolean IsUpToDate() {
+		if(!mInstalled) return false;
 		return GetLatestConfigVersion() == GetCurrentConfigVersion();
 	}
 	
 	public String GetName() {
-		return mCurrentConfig.GetProperty("general.name");
+		return mLatestConfig.GetProperty("general.name");
 	}
 	
 	public int GetCurrentConfigVersion() {
+		if(!mInstalled) return 0;
 		return Integer.parseInt(mCurrentConfig.GetProperty("general.config_version"));
 	}
 	
@@ -69,6 +79,7 @@ public class PluginInfo {
 	public PluginConfig mCurrentConfig;
 	
 	public ServerStatus mServerStatus;
+	public boolean mInstalled;
 		
 	public enum ServerStatus {
 		None,

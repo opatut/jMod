@@ -4,6 +4,7 @@ import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.Map.Entry;
 
 import net.minecraft.client.Minecraft;
 
@@ -53,6 +54,12 @@ public class PluginDownloader {
 		return conf;
 	}
 	
+	public void InstallPlugins(HashMap<String, PluginInfo> plugins_to_install) {
+		for(Entry<String, PluginInfo> e: plugins_to_install.entrySet()) {
+			DownloadPlugin(e.getKey());
+		}
+	}
+	
 	public boolean DownloadPlugin(String name) {
 		try {
 			return DownloadPlugin(DownloadPluginConfig(name));
@@ -75,4 +82,8 @@ public class PluginDownloader {
 	}
 	private HashMap<String,PluginDownloaderThread> mThreads;
 	private static PluginDownloader INSTANCE = null;
+
+	public static final String SERVER_URL = "http://opatut.dyndns.org:81/jmod/";
+	public static final String DOWNLOAD_URL = SERVER_URL + "plugins/get/%s";
+	public static final String SEARCH_URL = SERVER_URL + "plugins/search/%s";
 }
