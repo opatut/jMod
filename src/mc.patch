@@ -91,6 +91,55 @@ diff -u -r .\minecraft_original/net/minecraft/client/Minecraft.java .\minecraft/
                      if(Keyboard.getEventKey() == 87)
 Only in .\minecraft/net/minecraft/client: Minecraft.java.orig
 Only in .\minecraft/net/minecraft/client: Minecraft.java.rej
+diff -u -r .\minecraft_original/net/minecraft/src/CraftingManager.java .\minecraft/net/minecraft/src/CraftingManager.java
+--- .\minecraft_original/net/minecraft/src/CraftingManager.java	Sun Feb 13 12:42:00 2011
++++ .\minecraft/net/minecraft/src/CraftingManager.java	Thu Feb 17 18:40:00 2011
+@@ -5,6 +5,8 @@
+ 
+ import java.io.PrintStream;
+ import java.util.*;
++
++import JMod.CustomRecipeManager;
+ 
+ public class CraftingManager
+ {
+@@ -14,7 +16,8 @@
+         return instance;
+     }
+ 
+-    private CraftingManager()
++    @SuppressWarnings("unchecked")
++	private CraftingManager()
+     {
+         recipes = new ArrayList();
+         (new RecipesTools()).addRecipes(this);
+@@ -163,11 +166,15 @@
+         addRecipe(new ItemStack(Block.dispenser, 1), new Object[] {
+             "###", "#X#", "#R#", Character.valueOf('#'), Block.cobblestone, Character.valueOf('X'), Item.bow, Character.valueOf('R'), Item.redstone
+         });
+-        Collections.sort(recipes, new RecipeSorter(this));
+-        System.out.println((new StringBuilder()).append(recipes.size()).append(" recipes").toString());
++        sort();
++    }
++    
++    public void sort() {
++    	Collections.sort(recipes, new RecipeSorter(this));
++    	System.out.println((new StringBuilder()).append(recipes.size()).append(" recipes").toString());
+     }
+ 
+-    void addRecipe(ItemStack itemstack, Object aobj[])
++    public void addRecipe(ItemStack itemstack, Object aobj[])
+     {
+         String s = "";
+         int i = 0;
+@@ -275,6 +282,6 @@
+     }
+ 
+     private static final CraftingManager instance = new CraftingManager();
+-    private List recipes;
++    public List recipes;
+ 
+ }
 diff -u -r .\minecraft_original/net/minecraft/src/NetClientHandler.java .\minecraft/net/minecraft/src/NetClientHandler.java
 --- .\minecraft_original/net/minecraft/src/NetClientHandler.java	Sun Feb 13 12:42:00 2011
 +++ .\minecraft/net/minecraft/src/NetClientHandler.java	Sun Feb 13 22:04:40 2011
