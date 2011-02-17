@@ -30,6 +30,7 @@ public class PluginListGuiScreen extends GuiScreen{
 	public static void CreateSearchScreen(PluginSearchQuery query) {
 		PluginListGuiScreen s = new PluginListGuiScreen(Mode.Search);
 		if(query != null) {
+			s.mTmpSearchString = query.mSearchString;
 			s.SetPluginList(PluginLoader.getInstance().SearchForPlugins(query));
 		}
 		s.Display();
@@ -49,7 +50,7 @@ public class PluginListGuiScreen extends GuiScreen{
         {
 			ModListener.getInstance().mc.theWorld.sendQuittingDisconnectingPacket();
         }
-		ModListener.getInstance().mc.changeWorld1(null);
+		ModListener.getInstance().mc.changeWorld(null, "", null);
 		ModListener.getInstance().mc.displayGuiScreen(new GuiMainMenu());
 	}
 	
@@ -343,9 +344,8 @@ public class PluginListGuiScreen extends GuiScreen{
 	private static int mListPadding = 10;
 	private static int mMaxSearchQueryLength = 32;
 	
-	private PluginSearchQuery mQuery;
 	private int mLifeTime;
-	private String mTmpSearchString = "";
+	public String mTmpSearchString = "";
 	
 	public enum Mode {
 		Manage,
