@@ -16,6 +16,9 @@ public class TestPlugin1 extends Plugin {
 	public void OnInitialize() {
 		System.out.println("Initializing Testplugin1");
 		try {
+			CustomItemManager.getInstance().RegisterItem(new CustomSlimeItem(400));
+			CustomRecipeManager.getInstance().RegisterRecipe(new CustomSlimeRecipe());
+			
 			ModListener.getInstance().AddHook(EventType.UpdateGame, this, 
 					getClass().getDeclaredMethod("OnUpdate"));
 			
