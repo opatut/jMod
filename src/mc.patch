@@ -1,7 +1,8 @@
+Binary files .\minecraft_original/minecraft.jar and .\minecraft/minecraft.jar differ
 diff -u -r .\minecraft_original/net/minecraft/client/Minecraft.java .\minecraft/net/minecraft/client/Minecraft.java
---- .\minecraft_original/net/minecraft/client/Minecraft.java	Sun Feb 13 12:42:00 2011
-+++ .\minecraft/net/minecraft/client/Minecraft.java	Sun Feb 13 22:14:40 2011
-@@ -2,8 +2,15 @@
+--- .\minecraft_original/net/minecraft/client/Minecraft.java	Fri Feb 11 21:05:38 2011
++++ .\minecraft/net/minecraft/client/Minecraft.java	Tue Feb 15 16:46:36 2011
+@@ -2,8 +2,16 @@
  // Jad home page: http://www.kpdus.com/jad.html
  // Decompiler options: packimports(3) braces deadcode 
  
@@ -12,12 +13,13 @@ diff -u -r .\minecraft_original/net/minecraft/client/Minecraft.java .\minecraft/
 +import JMod.EventType;
 +import JMod.ModListener;
 +import JMod.ModManager;
++import JMod.ModOptions;
 +import JMod.PluginLoader;
 +
  import net.minecraft.src.AxisAlignedBB;
  import net.minecraft.src.Block;
  import net.minecraft.src.BlockGrass;
-@@ -86,6 +93,7 @@
+@@ -86,6 +94,7 @@
  import org.lwjgl.opengl.DisplayMode;
  import org.lwjgl.util.glu.GLU;
  
@@ -25,16 +27,24 @@ diff -u -r .\minecraft_original/net/minecraft/client/Minecraft.java .\minecraft/
  // Referenced classes of package net.minecraft.client:
  //            MinecraftApplet
  
-@@ -95,6 +103,8 @@
+@@ -95,6 +104,8 @@
  
      public Minecraft(Component component, Canvas canvas, MinecraftApplet minecraftapplet, int i, int j, boolean flag)
      {
 +    	ModManager.InitializeMod();
 +    	ModListener.getInstance().mc = this;
-         fullscreen = false;
+         mainFrame = false;
          timer = new Timer(20F);
          session = null;
-@@ -818,6 +828,7 @@
+@@ -745,6 +756,7 @@
+ 
+     public void shutdown()
+     {
++    	ModOptions.getInstance().Save();
+         running = false;
+     }
+ 
+@@ -818,6 +830,7 @@
  
      private void clickMouse(int i)
      {
@@ -42,7 +52,7 @@ diff -u -r .\minecraft_original/net/minecraft/client/Minecraft.java .\minecraft/
          if(i == 0 && field_6282_S > 0)
          {
              return;
-@@ -997,6 +1008,7 @@
+@@ -997,6 +1010,7 @@
  
      public void runTick()
      {
@@ -50,7 +60,7 @@ diff -u -r .\minecraft_original/net/minecraft/client/Minecraft.java .\minecraft/
          ingameGUI.func_555_a();
          entityRenderer.getMouseOver(1.0F);
          if(thePlayer != null)
-@@ -1059,6 +1071,16 @@
+@@ -1059,6 +1073,16 @@
                              func_6259_e();
                          } else
                          {
@@ -67,7 +77,7 @@ diff -u -r .\minecraft_original/net/minecraft/client/Minecraft.java .\minecraft/
                              if(Mouse.getEventButton() == 0 && Mouse.getEventButtonState())
                              {
                                  clickMouse(0);
-@@ -1091,7 +1113,21 @@
+@@ -1091,7 +1115,21 @@
                  {
                      break;
                  }
@@ -90,16 +100,62 @@ diff -u -r .\minecraft_original/net/minecraft/client/Minecraft.java .\minecraft/
                  {
                      if(Keyboard.getEventKey() == 87)
 Only in .\minecraft/net/minecraft/client: Minecraft.java.orig
-Only in .\minecraft/net/minecraft/client: Minecraft.java.rej
+diff -u -r .\minecraft_original/net/minecraft/src/GuiMainMenu.java .\minecraft/net/minecraft/src/GuiMainMenu.java
+--- .\minecraft_original/net/minecraft/src/GuiMainMenu.java	Fri Feb 11 21:05:39 2011
++++ .\minecraft/net/minecraft/src/GuiMainMenu.java	Tue Feb 15 19:10:39 2011
+@@ -10,6 +10,8 @@
+ import org.lwjgl.opengl.GL11;
+ import org.lwjgl.util.glu.GLU;
+ 
++import JMod.PluginListGuiScreen;
++
+ public class GuiMainMenu extends GuiScreen
+ {
+ 
+@@ -65,6 +67,17 @@
+     {
+         Calendar calendar = Calendar.getInstance();
+         calendar.setTime(new Date());
++        
++        
++        
++        if(calendar.get(2) + 1 == 12 && calendar.get(5) == 1)
++        {
++        	splashText = "Happy birthday, opatut!";
++        } else
++        if(calendar.get(2) + 1 == 5 && calendar.get(5) == 29)
++        {
++        	splashText = "Happy birthday, v0rtex!";
++        } else
+         if(calendar.get(2) + 1 == 11 && calendar.get(5) == 9)
+         {
+             splashText = "Happy birthday, ez!";
+@@ -86,9 +99,10 @@
+         controlList.add(new GuiButton(1, width / 2 - 100, i, stringtranslate.func_20163_a("menu.singleplayer")));
+         controlList.add(new GuiButton(2, width / 2 - 100, i + 24, stringtranslate.func_20163_a("menu.multiplayer")));
+         controlList.add(new GuiButton(3, width / 2 - 100, i + 48, stringtranslate.func_20163_a("menu.mods")));
++        controlList.add(new GuiButton(5, width / 2 + 2, i + 72, 98, 20, "jMod Plugins"));
+         if(mc.field_6317_l)
+         {
+-            controlList.add(new GuiButton(0, width / 2 - 100, i + 72, stringtranslate.func_20163_a("menu.options")));
++            controlList.add(new GuiButton(0, width / 2 - 100, i + 72, 98, 20, stringtranslate.func_20163_a("menu.options")));
+         } else
+         {
+             controlList.add(new GuiButton(0, width / 2 - 100, i + 72 + 12, 98, 20, stringtranslate.func_20163_a("menu.options")));
+@@ -121,6 +135,10 @@
+         if(guibutton.id == 4)
+         {
+             mc.shutdown();
++        }
++        if(guibutton.id == 5)
++        {
++        	PluginListGuiScreen.CreateManageScreen();
+         }
+     }
+ 
 diff -u -r .\minecraft_original/net/minecraft/src/NetClientHandler.java .\minecraft/net/minecraft/src/NetClientHandler.java
---- .\minecraft_original/net/minecraft/src/NetClientHandler.java	Sun Feb 13 12:42:00 2011
-+++ .\minecraft/net/minecraft/src/NetClientHandler.java	Sun Feb 13 22:04:40 2011
-@@ -1,4 +1,4 @@
--package net.minecraft.src;
-+package net.minecraft.src;
- // Decompiled by Jad v1.5.8g. Copyright 2001 Pavel Kouznetsov.
- // Jad home page: http://www.kpdus.com/jad.html
- // Decompiler options: packimports(3) braces deadcode 
+--- .\minecraft_original/net/minecraft/src/NetClientHandler.java	Fri Feb 11 21:05:39 2011
++++ .\minecraft/net/minecraft/src/NetClientHandler.java	Mon Feb 14 14:29:51 2011
 @@ -7,6 +7,9 @@
  import java.net.*;
  import java.util.Random;
@@ -131,7 +187,7 @@ diff -u -r .\minecraft_original/net/minecraft/src/NetClientHandler.java .\minecr
 +   	
          netManager.networkShutdown("disconnect.kicked", new Object[0]);
          disconnected = true;
-         mc.changeWorld1(null);
+         mc.func_6261_a(null);
 @@ -337,6 +348,12 @@
          }
          if(entity != null)
@@ -143,7 +199,7 @@ diff -u -r .\minecraft_original/net/minecraft/src/NetClientHandler.java .\minecr
 +        	ModListener.getInstance().HandleEvent(e);
 +        	
              worldClient.playSoundAtEntity(entity, "random.pop", 0.2F, ((rand.nextFloat() - rand.nextFloat()) * 0.7F + 1.0F) * 2.0F);
-             mc.effectRenderer.addEffect(new EntityPickupFX(mc.theWorld, entity, ((Entity) (obj)), -0.5F));
+             mc.effectRenderer.func_1192_a(new EntityPickupFX(mc.theWorld, entity, ((Entity) (obj)), -0.5F));
              worldClient.removeEntityFromWorld(packet22collect.collectedEntityId);
 @@ -345,6 +362,12 @@
  
@@ -173,12 +229,9 @@ diff -u -r .\minecraft_original/net/minecraft/src/NetClientHandler.java .\minecr
              addToSendQueue(new Packet1Login(mc.session.playerName, "Password", 8));
 Only in .\minecraft/net/minecraft/src: NetClientHandler.java.orig
 diff -u -r .\minecraft_original/net/minecraft/src/PlayerController.java .\minecraft/net/minecraft/src/PlayerController.java
---- .\minecraft_original/net/minecraft/src/PlayerController.java	Sun Feb 13 12:42:00 2011
-+++ .\minecraft/net/minecraft/src/PlayerController.java	Sun Feb 13 22:04:40 2011
-@@ -1,10 +1,15 @@
--package net.minecraft.src;
-+package net.minecraft.src;
- // Decompiled by Jad v1.5.8g. Copyright 2001 Pavel Kouznetsov.
+--- .\minecraft_original/net/minecraft/src/PlayerController.java	Fri Feb 11 21:05:39 2011
++++ .\minecraft/net/minecraft/src/PlayerController.java	Mon Feb 14 14:29:51 2011
+@@ -3,8 +3,13 @@
  // Jad home page: http://www.kpdus.com/jad.html
  // Decompiler options: packimports(3) braces deadcode 
  
@@ -242,13 +295,12 @@ diff -u -r .\minecraft_original/net/minecraft/src/PlayerController.java .\minecr
          int i1 = world.getBlockId(i, j, k);
          if(i1 > 0 && Block.blocksList[i1].blockActivated(world, i, j, k, entityplayer))
          {
+Only in .\minecraft/net/minecraft/src: PlayerController.java.orig
+Only in .\minecraft/net/minecraft/src: PlayerController.java.rej
 diff -u -r .\minecraft_original/net/minecraft/src/PlayerControllerMP.java .\minecraft/net/minecraft/src/PlayerControllerMP.java
---- .\minecraft_original/net/minecraft/src/PlayerControllerMP.java	Sun Feb 13 12:41:59 2011
-+++ .\minecraft/net/minecraft/src/PlayerControllerMP.java	Sun Feb 13 22:04:41 2011
-@@ -1,8 +1,12 @@
--package net.minecraft.src;
-+package net.minecraft.src;
- // Decompiled by Jad v1.5.8g. Copyright 2001 Pavel Kouznetsov.
+--- .\minecraft_original/net/minecraft/src/PlayerControllerMP.java	Fri Feb 11 21:05:39 2011
++++ .\minecraft/net/minecraft/src/PlayerControllerMP.java	Mon Feb 14 14:29:51 2011
+@@ -3,6 +3,10 @@
  // Jad home page: http://www.kpdus.com/jad.html
  // Decompiler options: packimports(3) braces deadcode 
  
@@ -259,15 +311,11 @@ diff -u -r .\minecraft_original/net/minecraft/src/PlayerControllerMP.java .\mine
  import net.minecraft.client.Minecraft;
  
  public class PlayerControllerMP extends PlayerController
+Only in .\minecraft/net/minecraft/src: PlayerControllerMP.java.orig
+Only in .\minecraft/net/minecraft/src: PlayerControllerMP.java.rej
 diff -u -r .\minecraft_original/net/minecraft/src/SoundManager.java .\minecraft/net/minecraft/src/SoundManager.java
---- .\minecraft_original/net/minecraft/src/SoundManager.java	Sun Feb 13 12:42:00 2011
-+++ .\minecraft/net/minecraft/src/SoundManager.java	Sun Feb 13 22:04:41 2011
-@@ -1,4 +1,4 @@
--package net.minecraft.src;
-+package net.minecraft.src;
- // Decompiled by Jad v1.5.8g. Copyright 2001 Pavel Kouznetsov.
- // Jad home page: http://www.kpdus.com/jad.html
- // Decompiler options: packimports(3) braces deadcode 
+--- .\minecraft_original/net/minecraft/src/SoundManager.java	Fri Feb 11 21:05:39 2011
++++ .\minecraft/net/minecraft/src/SoundManager.java	Mon Feb 14 14:29:51 2011
 @@ -234,7 +234,7 @@
          }
      }
@@ -277,3 +325,5 @@ diff -u -r .\minecraft_original/net/minecraft/src/SoundManager.java .\minecraft/
      private SoundPool soundPoolSounds;
      private SoundPool soundPoolStreaming;
      private SoundPool soundPoolMusic;
+Only in .\minecraft/net/minecraft/src: SoundManager.java.orig
+Only in .\minecraft/net/minecraft/src: SoundManager.java.rej
