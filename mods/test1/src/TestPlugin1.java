@@ -89,6 +89,8 @@ public class TestPlugin1 extends Plugin {
 			//try {
 				//sound.backgroundMusic("test", new URL("http://localhost/exp_loop_2.wav"), "exp_loop_2.wav", true);
 			//} catch (IOException e) {}
+		}else if(key == Keyboard.KEY_P) {
+			
 		}
 	}
 	

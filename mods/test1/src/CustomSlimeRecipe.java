@@ -1,11 +1,11 @@
 import net.minecraft.src.Block;
 import net.minecraft.src.Item;
+import JMod.CustomItemManager;
 import JMod.CustomRecipe;
 
 public class CustomSlimeRecipe extends CustomRecipe {
 	public Item GetProductItem() {
-		//return CustomItemManager.getInstance().GetItem("CustomSlime");
-		return Item.diamond;
+		return CustomItemManager.getInstance().GetItem("CustomSlime");
 	}
 
 	public int GetProductAmount() {
