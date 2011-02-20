@@ -1,4 +1,7 @@
 package JMod;
+
+import java.net.URLClassLoader;
+
 import net.minecraft.client.Minecraft;
 
 public abstract class Plugin {

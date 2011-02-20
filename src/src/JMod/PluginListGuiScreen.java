@@ -5,8 +5,6 @@ import java.util.Map.Entry;
 
 import JMod.PluginInfo.ServerStatus;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.src.FontAllowedCharacters;
 import net.minecraft.src.GuiButton;
 import net.minecraft.src.GuiMainMenu;
 import net.minecraft.src.GuiScreen;

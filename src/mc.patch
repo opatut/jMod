@@ -1,6 +1,6 @@
 diff -u -r .\minecraft_original/net/minecraft/client/Minecraft.java .\minecraft/net/minecraft/client/Minecraft.java
---- .\minecraft_original/net/minecraft/client/Minecraft.java	Sun Feb 13 12:42:00 2011
-+++ .\minecraft/net/minecraft/client/Minecraft.java	Thu Feb 17 19:49:27 2011
+--- .\minecraft_original/net/minecraft/client/Minecraft.java	Sun Feb 20 14:23:49 2011
++++ .\minecraft/net/minecraft/client/Minecraft.java	Sun Feb 20 14:24:11 2011
 @@ -2,8 +2,16 @@
  // Jad home page: http://www.kpdus.com/jad.html
  // Decompiler options: packimports(3) braces deadcode 
@@ -98,17 +98,9 @@ diff -u -r .\minecraft_original/net/minecraft/client/Minecraft.java .\minecraft/
                  if(Keyboard.getEventKeyState())
                  {
                      if(Keyboard.getEventKey() == 87)
-Only in .\minecraft/net/minecraft/client: Minecraft.java.orig
-Only in .\minecraft/net/minecraft/client: Minecraft.java.rej
 diff -u -r .\minecraft_original/net/minecraft/src/CraftingManager.java .\minecraft/net/minecraft/src/CraftingManager.java
---- .\minecraft_original/net/minecraft/src/CraftingManager.java	Sun Feb 13 12:42:00 2011
-+++ .\minecraft/net/minecraft/src/CraftingManager.java	Thu Feb 17 19:49:27 2011
-@@ -1,4 +1,4 @@
--package net.minecraft.src;
-+package net.minecraft.src;
- // Decompiled by Jad v1.5.8g. Copyright 2001 Pavel Kouznetsov.
- // Jad home page: http://www.kpdus.com/jad.html
- // Decompiler options: packimports(3) braces deadcode 
+--- .\minecraft_original/net/minecraft/src/CraftingManager.java	Sun Feb 20 14:23:49 2011
++++ .\minecraft/net/minecraft/src/CraftingManager.java	Sun Feb 20 14:24:11 2011
 @@ -6,6 +6,8 @@
  import java.io.PrintStream;
  import java.util.*;
@@ -156,14 +148,8 @@ diff -u -r .\minecraft_original/net/minecraft/src/CraftingManager.java .\minecra
  
  }
 diff -u -r .\minecraft_original/net/minecraft/src/GuiMainMenu.java .\minecraft/net/minecraft/src/GuiMainMenu.java
---- .\minecraft_original/net/minecraft/src/GuiMainMenu.java	Sun Feb 13 12:42:00 2011
-+++ .\minecraft/net/minecraft/src/GuiMainMenu.java	Thu Feb 17 19:58:26 2011
-@@ -1,4 +1,4 @@
--package net.minecraft.src;
-+package net.minecraft.src;
- // Decompiled by Jad v1.5.8g. Copyright 2001 Pavel Kouznetsov.
- // Jad home page: http://www.kpdus.com/jad.html
- // Decompiler options: packimports(3) braces deadcode 
+--- .\minecraft_original/net/minecraft/src/GuiMainMenu.java	Sun Feb 20 14:23:49 2011
++++ .\minecraft/net/minecraft/src/GuiMainMenu.java	Sun Feb 20 14:24:11 2011
 @@ -10,6 +10,8 @@
  import org.lwjgl.opengl.GL11;
  import org.lwjgl.util.glu.GLU;
@@ -214,17 +200,9 @@ diff -u -r .\minecraft_original/net/minecraft/src/GuiMainMenu.java .\minecraft/n
          }
      }
  
-Only in .\minecraft/net/minecraft/src: GuiMainMenu.java.orig
-Only in .\minecraft/net/minecraft/src: GuiMainMenu.java.rej
 diff -u -r .\minecraft_original/net/minecraft/src/NetClientHandler.java .\minecraft/net/minecraft/src/NetClientHandler.java
---- .\minecraft_original/net/minecraft/src/NetClientHandler.java	Sun Feb 13 12:42:00 2011
-+++ .\minecraft/net/minecraft/src/NetClientHandler.java	Thu Feb 17 19:49:27 2011
-@@ -1,4 +1,4 @@
--package net.minecraft.src;
-+package net.minecraft.src;
- // Decompiled by Jad v1.5.8g. Copyright 2001 Pavel Kouznetsov.
- // Jad home page: http://www.kpdus.com/jad.html
- // Decompiler options: packimports(3) braces deadcode 
+--- .\minecraft_original/net/minecraft/src/NetClientHandler.java	Sun Feb 20 14:23:49 2011
++++ .\minecraft/net/minecraft/src/NetClientHandler.java	Sun Feb 20 14:24:11 2011
 @@ -7,6 +7,9 @@
  import java.net.*;
  import java.util.Random;
@@ -245,7 +223,7 @@ diff -u -r .\minecraft_original/net/minecraft/src/NetClientHandler.java .\minecr
 +    	ModListener.getInstance().HandleEvent(e);
 +    	
          mc.playerController = new PlayerControllerMP(mc, this);
-         worldClient = new WorldClient(this, packet1login.field_4074_d, packet1login.field_4073_e);
+         worldClient = new WorldClient(this, packet1login.mapSeed, packet1login.dimension);
          worldClient.multiplayerWorld = true;
 @@ -293,6 +301,9 @@
  
@@ -295,15 +273,12 @@ diff -u -r .\minecraft_original/net/minecraft/src/NetClientHandler.java .\minecr
 +    	
          if(packet2handshake.username.equals("-"))
          {
-             addToSendQueue(new Packet1Login(mc.session.playerName, "Password", 8));
+             addToSendQueue(new Packet1Login(mc.session.username, "Password", 8));
 Only in .\minecraft/net/minecraft/src: NetClientHandler.java.orig
 diff -u -r .\minecraft_original/net/minecraft/src/PlayerController.java .\minecraft/net/minecraft/src/PlayerController.java
---- .\minecraft_original/net/minecraft/src/PlayerController.java	Sun Feb 13 12:42:00 2011
-+++ .\minecraft/net/minecraft/src/PlayerController.java	Thu Feb 17 19:49:27 2011
-@@ -1,10 +1,15 @@
--package net.minecraft.src;
-+package net.minecraft.src;
- // Decompiled by Jad v1.5.8g. Copyright 2001 Pavel Kouznetsov.
+--- .\minecraft_original/net/minecraft/src/PlayerController.java	Sun Feb 20 14:23:49 2011
++++ .\minecraft/net/minecraft/src/PlayerController.java	Sun Feb 20 14:24:11 2011
+@@ -3,8 +3,13 @@
  // Jad home page: http://www.kpdus.com/jad.html
  // Decompiler options: packimports(3) braces deadcode 
  
@@ -368,12 +343,9 @@ diff -u -r .\minecraft_original/net/minecraft/src/PlayerController.java .\minecr
          if(i1 > 0 && Block.blocksList[i1].blockActivated(world, i, j, k, entityplayer))
          {
 diff -u -r .\minecraft_original/net/minecraft/src/PlayerControllerMP.java .\minecraft/net/minecraft/src/PlayerControllerMP.java
---- .\minecraft_original/net/minecraft/src/PlayerControllerMP.java	Sun Feb 13 12:41:59 2011
-+++ .\minecraft/net/minecraft/src/PlayerControllerMP.java	Thu Feb 17 19:49:27 2011
-@@ -1,8 +1,12 @@
--package net.minecraft.src;
-+package net.minecraft.src;
- // Decompiled by Jad v1.5.8g. Copyright 2001 Pavel Kouznetsov.
+--- .\minecraft_original/net/minecraft/src/PlayerControllerMP.java	Sun Feb 20 14:23:49 2011
++++ .\minecraft/net/minecraft/src/PlayerControllerMP.java	Sun Feb 20 14:24:11 2011
+@@ -3,6 +3,10 @@
  // Jad home page: http://www.kpdus.com/jad.html
  // Decompiler options: packimports(3) braces deadcode 
  
@@ -384,15 +356,67 @@ diff -u -r .\minecraft_original/net/minecraft/src/PlayerControllerMP.java .\mine
  import net.minecraft.client.Minecraft;
  
  public class PlayerControllerMP extends PlayerController
+diff -u -r .\minecraft_original/net/minecraft/src/RenderEngine.java .\minecraft/net/minecraft/src/RenderEngine.java
+--- .\minecraft_original/net/minecraft/src/RenderEngine.java	Sun Feb 20 14:23:49 2011
++++ .\minecraft/net/minecraft/src/RenderEngine.java	Sun Feb 20 16:53:56 2011
+@@ -76,6 +76,20 @@
+             throw new RuntimeException("!!");
+         }
+     }
++    
++    public Integer getTextureIndex(String s) {
++    	return (Integer)textureMap.get(s);
++    }
++    
++    public int loadTextureFromBufferedImage(String s, BufferedImage img)
++    {
++        singleIntBuffer.clear();
++        GLAllocation.generateTextureNames(singleIntBuffer);
++        int i = singleIntBuffer.get(0);
++        setupTexture(img, i);
++        textureMap.put(s, Integer.valueOf(i));
++        return i;
++    }
+ 
+     private BufferedImage unwrapImageByColumns(BufferedImage bufferedimage)
+     {
+@@ -463,7 +477,7 @@
+     public static boolean useMipmaps = false;
+     private HashMap textureMap;
+     private HashMap textureNameToImageMap;
+-    private IntBuffer singleIntBuffer;
++    public IntBuffer singleIntBuffer;
+     private ByteBuffer imageData;
+     private java.util.List textureList;
+     private Map urlToImageDataMap;
+diff -u -r .\minecraft_original/net/minecraft/src/RenderManager.java .\minecraft/net/minecraft/src/RenderManager.java
+--- .\minecraft_original/net/minecraft/src/RenderManager.java	Sun Feb 20 14:23:49 2011
++++ .\minecraft/net/minecraft/src/RenderManager.java	Sun Feb 20 15:08:06 2011
+@@ -38,12 +38,19 @@
+         entityRenderMap.put(EntityMinecart.class, new RenderMinecart());
+         entityRenderMap.put(EntityBoat.class, new RenderBoat());
+         entityRenderMap.put(EntityFish.class, new RenderFish());
+-        Render render;
++        sort();
++    }
++    
++    public void addEntityRender(Class<? extends Entity> e, Render r) {
++    	entityRenderMap.put(e, r);
++    }
++    
++    public void sort() {
++    	Render render;
+         for(Iterator iterator = entityRenderMap.values().iterator(); iterator.hasNext(); render.setRenderManager(this))
+         {
+             render = (Render)iterator.next();
+         }
+-
+     }
+ 
+     public Render getEntityClassRenderObject(Class class1)
 diff -u -r .\minecraft_original/net/minecraft/src/SoundManager.java .\minecraft/net/minecraft/src/SoundManager.java
---- .\minecraft_original/net/minecraft/src/SoundManager.java	Sun Feb 13 12:42:00 2011
-+++ .\minecraft/net/minecraft/src/SoundManager.java	Thu Feb 17 19:49:27 2011
-@@ -1,4 +1,4 @@
--package net.minecraft.src;
-+package net.minecraft.src;
- // Decompiled by Jad v1.5.8g. Copyright 2001 Pavel Kouznetsov.
- // Jad home page: http://www.kpdus.com/jad.html
- // Decompiler options: packimports(3) braces deadcode 
+--- .\minecraft_original/net/minecraft/src/SoundManager.java	Sun Feb 20 14:23:49 2011
++++ .\minecraft/net/minecraft/src/SoundManager.java	Sun Feb 20 14:24:11 2011
 @@ -234,7 +234,7 @@
          }
      }
@@ -402,3 +426,19 @@ diff -u -r .\minecraft_original/net/minecraft/src/SoundManager.java .\minecraft/
      private SoundPool soundPoolSounds;
      private SoundPool soundPoolStreaming;
      private SoundPool soundPoolMusic;
+diff -u -r .\minecraft_original/net/minecraft/src/TexturePackBase.java .\minecraft/net/minecraft/src/TexturePackBase.java
+--- .\minecraft_original/net/minecraft/src/TexturePackBase.java	Sun Feb 20 14:23:49 2011
++++ .\minecraft/net/minecraft/src/TexturePackBase.java	Sun Feb 20 16:35:13 2011
+@@ -3,7 +3,12 @@
+ // Jad home page: http://www.kpdus.com/jad.html
+ // Decompiler options: packimports(3) braces deadcode 
+ 
++import java.io.File;
++import java.io.FileInputStream;
++import java.io.IOException;
+ import java.io.InputStream;
++import java.util.jar.JarInputStream;
++
+ import net.minecraft.client.Minecraft;
+ 
+ public abstract class TexturePackBase

@@ -1,7 +1,5 @@
 package JMod;
 
-import java.util.Collections;
-
 import net.minecraft.src.CraftingManager;
 import net.minecraft.src.ItemStack;
 

@@ -1,23 +1,16 @@
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.HashMap;
-
 import JMod.*;
-import net.minecraft.src.GuiInventory;
-import net.minecraft.src.SoundManager;
-
 import org.lwjgl.input.Keyboard;
-
-import paulscode.sound.*;
 
 
 public class TestPlugin1 extends Plugin {
-	public void OnInitialize() {
+	public void OnInitialize() {		
 		System.out.println("Initializing Testplugin1");
 		try {
 			CustomItemManager.getInstance().RegisterItem(new CustomSlimeItem(400));
 			CustomRecipeManager.getInstance().RegisterRecipe(new CustomSlimeRecipe());
+			CustomEntityManager.getInstance().RegisterEntityWithRender(CustomFireball.class, new RenderCustomFireball());
+			CustomTextureManager.getInstance().RegisterTexture(this, "/plugins/TestPlugin1/icons.png");
+				
 			
 			ModListener.getInstance().AddHook(EventType.UpdateGame, this, 
 					getClass().getDeclaredMethod("OnUpdate"));

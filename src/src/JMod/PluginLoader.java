@@ -1,18 +1,13 @@
 package JMod;
 
 import java.io.File;
-import java.io.FilenameFilter;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
 import org.ini4j.Ini;
-import org.ini4j.InvalidFileFormatException;
-
 import net.minecraft.client.Minecraft;
 
 
