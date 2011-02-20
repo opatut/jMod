@@ -1,10 +1,12 @@
 package JMod;
 
 import java.io.File;
-import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map.Entry;
+
+import JMod.DownloadException.Reason;
 
 import net.minecraft.client.Minecraft;
 
@@ -25,47 +27,53 @@ public class PluginDownloader {
     }
 	
 
-	public boolean DownloadPlugin(PluginConfig conf) {
+	public boolean DownloadPlugin(PluginConfig conf) throws DownloadException {
 		try {
 			URL url = new URL(conf.GetProperty("download.source"));
 			String name = conf.GetProperty("general.name");
 			File file = new File(Minecraft.getMinecraftDir(), 
-					"plugins/" + name + "-" + conf.GetProperty("general.config_version") + "/plugin.jar");
+					"plugins/" + name + ".jar");
 			file.getParentFile().mkdirs();
 			PluginDownloaderThread t = new PluginDownloaderThread(name, url, file);
 			t.start();
 			mThreads.put(name,t);
 			return true;
-		} catch (IOException e) {
-			return false;
+		} catch (MalformedURLException e) {
+			throw new DownloadException(Reason.SERVER_NOT_FOUND, conf.GetProperty("general.name"), "Malformed URL");
 		}
 	}
 	
-	public PluginConfig DownloadPluginConfig(String name) throws IOException {
-		URL url = new URL("http://opatut.dyndns.org:81/jmod/index.php/plugins/get/" + name);
+	public PluginConfig DownloadPluginConfig(String name) throws DownloadException {
+		URL url;
+		try {
+			url = new URL("http://opatut.dyndns.org:81/jmod/index.php/plugins/get/" + name);
+		} catch (MalformedURLException e) {
+			throw new DownloadException(Reason.SERVER_NOT_FOUND, name, "Malformed URL");
+		}
 		
 		PluginConfig conf = new PluginConfig();
 		conf.LoadFromURL(url);
 		
-        File file = new File(Minecraft.getMinecraftDir(), "plugins/" + name + "-" + conf.GetProperty("general.config_version") + "/plugin.config");
+        File file = new File(Minecraft.getMinecraftDir(), "plugins/latest/" + name + ".config");
         file.getParentFile().mkdirs();
         conf.SaveToFile(file);
         
 		return conf;
 	}
 	
-	public void InstallPlugins(HashMap<String, PluginInfo> plugins_to_install) {
+	public void InstallPlugins(HashMap<String, PluginInfo> plugins_to_install)  {
 		for(Entry<String, PluginInfo> e: plugins_to_install.entrySet()) {
-			DownloadPlugin(e.getKey());
+			try {
+				DownloadPlugin(e.getKey());
+			} catch (DownloadException e1) {
+				e.getValue().mDownloadFailed = true;
+				e.getValue().mDownloadFailException = e1;
+			}
 		}
 	}
 	
-	public boolean DownloadPlugin(String name) {
-		try {
-			return DownloadPlugin(DownloadPluginConfig(name));
-		} catch (IOException e) {
-			return false;
-		}
+	public boolean DownloadPlugin(String name) throws DownloadException {
+		return DownloadPlugin(DownloadPluginConfig(name));
 	}
 	
 	public void CancelPluginDownload(String name) {

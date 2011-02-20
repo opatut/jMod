@@ -1,54 +1,48 @@
 package JMod;
 import java.io.File;
-import java.io.IOException;
 
 import net.minecraft.client.Minecraft;
 
 
 public class PluginInfo {
-	public PluginInfo(String name, File current_config) {
+	public PluginInfo(String name) {
+		mName = name;
 		mServerStatus = ServerStatus.None;
-		
-		try {
-			mLatestConfig = PluginDownloader.getInstance().DownloadPluginConfig(name);
-			
-			if(current_config != null && current_config.exists()) {
-				mCurrentConfig = new PluginConfig();
-				mCurrentConfig.LoadFromURL(current_config.toURI().toURL());
-				
-				if (!mCurrentConfig.GetProperty("general.name").equals(mLatestConfig.GetProperty("general.name"))) { 
-					System.err.println("Fatal Error: Current and latest config plugin name do not match.");
-					System.err.println("> Requested: " + name);
-					System.err.println("> Current:   " + mCurrentConfig.GetProperty("general.name"));
-					System.err.println("> Latest:    " + mLatestConfig.GetProperty("general.name"));
-					System.exit(1);
-				} else {
-					mInstalled = true;
-				}
-			} else {
-				// pretend the plugin is not installed
-				mInstalled = false;
-			}
-		} catch (IOException e) {
-			System.out.println("Could not create PluginInfo: config file not found or download failed.");
+		mCurrentConfig = null;
+		mLatestConfig = null;
+		mDownloadFailed = false;
+	}
+	
+	public void LoadCurrentConfig(File current_config) {
+		mCurrentConfig = new PluginConfig();
+		if(!mCurrentConfig.LoadFromFile(current_config, false)) {
+			// disable plugin
+			System.err.println("Could not load current plugin info. Disabling plugin: " + mName);
+			PluginLoader.getInstance().DisablePlugin(mName);
+			mInstalled = false;
+		} else {
+			mInstalled = true;
 		}
 	}
 	
+	public void LoadLatestConfig() throws DownloadException {
+		mLatestConfig = PluginDownloader.getInstance().DownloadPluginConfig(mName);	
+	}
+		
 	public File GetCurrentFile() {
-		return new File(Minecraft.getMinecraftDir(), "plugins/" + GetName() + "-" + GetCurrentConfigVersion() + "/plugin.jar");
+		return new File(Minecraft.getMinecraftDir(), "plugins/" + GetName() + ".jar");
 	}
 	
-	public File GetLatestFile() {
-		return new File(Minecraft.getMinecraftDir(), "plugins/" + GetName() + "-" + GetLatestConfigVersion() + "/plugin.jar");
-	}
-	
-	public boolean IsUpToDate() {
-		if(!mInstalled) return false;
+	public boolean IsUpToDate() throws DownloadException {
+		if(!mInstalled) 
+			return false;
+		if(mLatestConfig == null)
+			LoadLatestConfig();
 		return GetLatestConfigVersion() == GetCurrentConfigVersion();
 	}
 	
 	public String GetName() {
-		return mLatestConfig.GetProperty("general.name");
+		return mName;
 	}
 	
 	public int GetCurrentConfigVersion() {
@@ -56,7 +50,9 @@ public class PluginInfo {
 		return Integer.parseInt(mCurrentConfig.GetProperty("general.config_version"));
 	}
 	
-	public int GetLatestConfigVersion() {
+	public int GetLatestConfigVersion() throws DownloadException {
+		if(mLatestConfig == null)
+			LoadLatestConfig();
 		return Integer.parseInt(mLatestConfig.GetProperty("general.config_version"));
 	}
 	
@@ -80,6 +76,11 @@ public class PluginInfo {
 	
 	public ServerStatus mServerStatus;
 	public boolean mInstalled;
+	
+	private String mName;
+	
+	public boolean mDownloadFailed;
+	public DownloadException mDownloadFailException;
 		
 	public enum ServerStatus {
 		None,
