@@ -18,7 +18,8 @@ public class CustomSlimeItem extends CustomItem{
 	public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer entityplayer) {
         itemstack.stackSize--;
         if(!world.multiplayerWorld) {        	
-            world.entityJoinedWorld(new CustomFireball(world, entityplayer, entityplayer.getLookVec().xCoord * 5, entityplayer.getLookVec().yCoord * 5, entityplayer.getLookVec().zCoord * 5));
+            //world.entityJoinedWorld(new CustomFireball(world, entityplayer, entityplayer.getLookVec().xCoord * 5, entityplayer.getLookVec().yCoord * 5, entityplayer.getLookVec().zCoord * 5));
+        	world.entityJoinedWorld(new Armageddon(world, entityplayer, 40, 20, 1));
         }
         return itemstack;
     }
