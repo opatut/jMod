@@ -29,7 +29,11 @@ public class PluginListGuiScreen extends GuiScreen{
 		PluginListGuiScreen s = new PluginListGuiScreen(Mode.Search);
 		if(query != null) {
 			s.mTmpSearchString = query.mSearchString;
-			s.SetPluginList(PluginLoader.getInstance().SearchForPlugins(query));
+			try {
+				s.SetPluginList(PluginLoader.getInstance().SearchForPlugins(query));
+			} catch (DownloadException e) {
+				s.mErrorMessage = "Could not load search results: \n" + e.Message;
+			}
 		}
 		s.Display();
 	}
@@ -243,7 +247,10 @@ public class PluginListGuiScreen extends GuiScreen{
 		
 		int i1 = -1;
 		int l = 0;
-		if(mPlugins != null && mPlugins.size() > 0) {
+		if(mErrorMessage != null && !mErrorMessage.equals("")) {
+			drawCenteredString(fontRenderer, mErrorMessage, width / 2,
+					mListMarginTop + (mListMarginBottom - mListMarginTop) / 2, 0xFF0000);
+		} else if(mPlugins != null && mPlugins.size() > 0) {
 			for(Entry<String, PluginInfo> e: mPlugins.entrySet()) {
 				++i1;
 				
@@ -277,12 +284,20 @@ public class PluginListGuiScreen extends GuiScreen{
 				}
 				
 				if(mMode == Mode.Search) {
-					drawString(fontRenderer, "Version: " + e.getValue().GetLatestConfigVersion(), width / 2, y + 3, 0xCCCCCC);
+					try {
+						drawString(fontRenderer, "Version: " + e.getValue().GetLatestConfigVersion(), width / 2, y + 3, 0xCCCCCC);
+					} catch (DownloadException e2) {
+						drawString(fontRenderer, "Unknown version", width / 2, y + 3, 0xCCCCCC);
+					}
 					if(e.getValue().mInstalled) {
-						if(e.getValue().IsUpToDate())
-							drawString(fontRenderer, "Installed", width / 4 * 3, y + 3, 0x00aa00);
-						else
-							drawString(fontRenderer, "Outdated", width / 4 * 3, y + 3, 0xaa0000);
+						try {
+							if(e.getValue().IsUpToDate())
+								drawString(fontRenderer, "Installed", width / 4 * 3, y + 3, 0x00aa00);
+							else
+								drawString(fontRenderer, "Outdated", width / 4 * 3, y + 3, 0xaa0000);
+						} catch (DownloadException e1) {
+							drawString(fontRenderer, e1.Message, width / 4 * 3, y + 3, 0xFF0000);
+						}
 					} 
 				}
 				
@@ -344,6 +359,8 @@ public class PluginListGuiScreen extends GuiScreen{
 	
 	private int mLifeTime;
 	public String mTmpSearchString = "";
+	
+	public String mErrorMessage = null;
 	
 	public enum Mode {
 		Manage,

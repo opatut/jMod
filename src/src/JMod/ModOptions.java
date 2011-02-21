@@ -1,12 +1,9 @@
 package JMod;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 
 import net.minecraft.client.Minecraft;
-
-import org.ini4j.Ini;
 
 public class ModOptions {
 	// SINGLETON
@@ -22,36 +19,36 @@ public class ModOptions {
 	}
 	
 	public boolean Load() {
-		try {
-			Ini ini = new Ini();
-			ini.load(GetFile());
-			// ============================================================
-			String enabled = ini.get("plugins", "enabled");
-			String[] split = enabled.split(",");
-			EnabledPlugins.clear();
-			for(String s: split)
-				EnabledPlugins.add(s.trim());
-			// ============================================================
-			return true;
-		} catch (IOException e) {
+		ConfigFile conf = new ConfigFile();
+		if(!conf.LoadFromFile(GetFile())) {
+			System.err.println("Could not load jMod options.");
 			return false;
-		}
+		} 
+		// ============================================================
+		String enabled = conf.GetProperty("plugins.enabled", "");
+		String[] split = enabled.split(",");
+		EnabledPlugins.clear();
+		for(String s: split)
+			if(s.trim().length() != 0)
+				EnabledPlugins.add(s.trim());
+		// ============================================================	
+		return true;
 	}
 	
 	public File GetFile() {
-		return new File(Minecraft.getMinecraftDir(), "jmod.ini");
+		return new File(Minecraft.getMinecraftDir(), ConfigFileName);
 	}
 	
 	public boolean Save() {
 		try {
-			Ini ini = new Ini();
+			ConfigFile conf = new ConfigFile();
 			// ============================================================
 			String enabled = "";
 			for(String s: EnabledPlugins)
 				enabled += s + ",";
-			ini.put("plugins", "enabled", enabled);
+			conf.SetProperty("plugins.enabled", enabled);
 			// ============================================================
-			ini.store(GetFile());
+			conf.SaveToFile(GetFile());
 			return true;
 		} catch (Exception e) {
 			return false;
@@ -60,4 +57,5 @@ public class ModOptions {
 	
 	public ArrayList<String> EnabledPlugins;
 	private static ModOptions INSTANCE = null;
+	public final static String ConfigFileName = "jMod.properties"; 
 }
