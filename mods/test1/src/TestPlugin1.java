@@ -9,10 +9,11 @@ public class TestPlugin1 extends Plugin {
 			CustomItemManager.getInstance().RegisterItem(new CustomSlimeItem(400));
 			CustomRecipeManager.getInstance().RegisterRecipe(new CustomSlimeRecipe());
 			CustomEntityManager.getInstance().RegisterEntityWithRender(CustomFireball.class, new RenderCustomFireball());
+			CustomEntityManager.getInstance().RegisterEntityWithRender(Meteor.class, new RenderMeteor());
 			CustomTextureManager.getInstance().RegisterTexture(this, "/plugins/TestPlugin1/icons.png");
 				
 			
-			ModListener.getInstance().AddHook(EventType.UpdateGame, this, 
+			/*ModListener.getInstance().AddHook(EventType.UpdateGame, this, 
 					getClass().getDeclaredMethod("OnUpdate"));
 			
 			ModListener.getInstance().AddHook(EventType.KeyPressed, this, 
@@ -26,7 +27,7 @@ public class TestPlugin1 extends Plugin {
 			
 			ModListener.getInstance().AddHook(EventType.MouseButtonDown, this, 
 					getClass().getDeclaredMethod("OnMouseClick", int.class,int.class,int.class));
-			
+			 	*/
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

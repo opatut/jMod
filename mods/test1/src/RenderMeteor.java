@@ -25,7 +25,7 @@ public class RenderMeteor extends Render
         b.SetRotation(Vec3D.createVector(f, f1, 0));
         TextureInfo face = new TextureInfo();
         face.Resource = "/plugins/TestPlugin1/icons.png";
-        face.U = 0F;
+        face.U = 1 / 8F;
         face.V = 0F;
         face.UVHeight = 1 / 8F;
         face.UVWidth = 1 / 8F;

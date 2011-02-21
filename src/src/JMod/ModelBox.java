@@ -9,6 +9,9 @@ public class ModelBox implements IModel {
 
 	public ModelBox(Vec3D pos, Vec3D size) {
 		faces = new TextureInfo[6];
+		mPosition = pos;
+		mSize = size;
+		mRotation = Vec3D.createVector(0, 0, 0);
 	}
 	
 	public void SetRotation(Vec3D rot) {
@@ -59,7 +62,6 @@ public class ModelBox implements IModel {
         GL11.glRotatef((float) mRotation.yCoord, 0.0F, 1.0F, 0.0F);
         GL11.glRotatef((float) mRotation.zCoord, 0.0F, 0.0F, 1.0F);
         tess.startDrawingQuads();
-        tess.setNormal(0.0F, 1.0F, 0.0F);
         
         float x1,x2,x3,x4;
         float y1,y2,y3,y4;
@@ -72,43 +74,49 @@ public class ModelBox implements IModel {
         	x2 = +1; y2 = +1; z2 = -1;
         	x3 = +1; y3 = +1; z3 = +1;
         	x4 = -1; y4 = +1; z4 = +1;
+        	tess.setNormal(0.0F, 1.0F, 0.0F);
         	break;
         case Bottom:
         	x1 = -1; y1 = -1; z1 = +1;
         	x2 = +1; y2 = -1; z2 = +1;
         	x3 = +1; y3 = -1; z3 = -1;
         	x4 = -1; y4 = -1; z4 = -1;
+        	tess.setNormal(0.0F, 1.0F, 0.0F);
         	break;
         case Left:
         	x1 = -1; y1 = +1; z1 = -1;
         	x2 = -1; y2 = +1; z2 = +1;
         	x3 = -1; y3 = -1; z3 = +1;
         	x4 = -1; y4 = -1; z4 = -1;
+        	tess.setNormal(1.0F, 0.0F, 0.0F);
         	break;
         case Right:
         	x1 = +1; y1 = +1; z1 = +1;
         	x2 = +1; y2 = +1; z2 = -1;
         	x3 = +1; y3 = -1; z3 = -1;
         	x4 = +1; y4 = -1; z4 = +1;
+        	tess.setNormal(1.0F, 0.0F, 0.0F);
         	break;
         case Front:
         	x1 = -1; y1 = +1; z1 = +1;
         	x2 = +1; y2 = +1; z2 = +1;
         	x3 = +1; y3 = -1; z3 = +1;
         	x4 = -1; y4 = -1; z4 = +1;
+        	tess.setNormal(0.0F, 0.0F, 1.0F);
         	break;
         case Back:
         	x1 = +1; y1 = +1; z1 = -1;
         	x2 = +1; y2 = -1; z2 = -1;
         	x3 = -1; y3 = -1; z3 = -1;
         	x4 = -1; y4 = +1; z4 = -1;
+        	tess.setNormal(0.0F, 0.0F, 1.0F);
         	break;
         }
 
         tess.addVertexWithUV(x1, y1, z1, i.U, i.V);								// top left
-        tess.addVertexWithUV(x2, y2, z2, i.U + i.UVWidth, i.V);					// top right
-        tess.addVertexWithUV(x3, y3, z3, i.U + i.UVWidth, i.V + i.UVHeight);	// bottom right
         tess.addVertexWithUV(x4, y4, z4, i.U, i.V + i.UVHeight);        		// bottom left
+        tess.addVertexWithUV(x3, y3, z3, i.U + i.UVWidth, i.V + i.UVHeight);	// bottom right
+        tess.addVertexWithUV(x2, y2, z2, i.U + i.UVWidth, i.V);					// top right
         tess.draw();
         GL11.glDisable(32826 /*GL_RESCALE_NORMAL_EXT*/);
         GL11.glPopMatrix();

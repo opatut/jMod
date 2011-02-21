@@ -7,11 +7,17 @@ import net.minecraft.src.World;
 public class Armageddon extends Entity {
 	public Armageddon(World world, EntityLiving spawner, double radius, double amount, double delay) {
         super(world);
+        System.out.println("You will now die." + amount + " " + delay);
+        posX = spawner.posX;
+        posY = spawner.posY;
+        posZ = spawner.posZ;
         mWorld = world;
         mSpawner = spawner;
         mRadius = radius;
         mAmount = amount;
         mDelayBetweenMeteors = delay;
+        mLifetime = 0;
+        mTimeoutForSpawn = 0;
     }
 
     protected void entityInit() {
@@ -19,14 +25,16 @@ public class Armageddon extends Entity {
 
     public void onUpdate() {
         super.onUpdate();
-        if(mLifetime > mAmount * mDelayBetweenMeteors) {
+        if(mLifetime >= mAmount * mDelayBetweenMeteors) {
             setEntityDead();	
+            System.out.println("Armageddon is over now ;)");
         } else {
         	// spawn new fireballs
         	float timediff = 1 / 20F;
         	mLifetime += timediff;
         	mTimeoutForSpawn -= timediff;
         	while(mTimeoutForSpawn < 0) {
+        		System.out.println("Creating meteor");
         		mWorld.entityJoinedWorld(CreateNewMeteor());
         		mTimeoutForSpawn += mDelayBetweenMeteors;
         	}
@@ -39,8 +47,8 @@ public class Armageddon extends Entity {
     	Vec3D speed = Vec3D.createVector(0, -1, 0);
     	pos.xCoord += mRadius * (rand.nextFloat() * 2 - 1);
     	pos.zCoord += mRadius * (rand.nextFloat() * 2 - 1);
-    	pos.xCoord += 0.1 * (rand.nextFloat() * 2 - 1);
-    	pos.zCoord += 0.1 * (rand.nextFloat() * 2 - 1);
+    	speed.xCoord += (rand.nextFloat() * 2 - 1);
+    	speed.zCoord += (rand.nextFloat() * 2 - 1);
     	return new Meteor(mWorld, pos, speed);
     }
     

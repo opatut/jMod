@@ -13,8 +13,13 @@ public class Meteor extends Entity {
 
 	public Meteor(World world, Vec3D pos, Vec3D speed) {
 		super(world);
-		mPosition = pos;
-		mSpeed = speed;
+		posX = pos.xCoord;
+		posY = pos.yCoord;
+		posZ = pos.zCoord;
+		
+		motionX = speed.xCoord;
+		motionY = speed.yCoord;
+		motionZ = speed.zCoord;
 	}
 
 	protected void entityInit() {
@@ -22,10 +27,10 @@ public class Meteor extends Entity {
 	
 	public void onUpdate() {
 		super.onUpdate();
-		mPosition.xCoord += mSpeed.xCoord;
-		mPosition.yCoord += mSpeed.yCoord;
-		mPosition.zCoord += mSpeed.zCoord;
-		
+		posX += motionX;
+		posY += motionY;
+		posZ += motionZ;
+        worldObj.spawnParticle("smoke", posX, posY + 0.5D, posZ, 0.0D, 0.0D, 0.0D);
 		// check collisions
 		@SuppressWarnings("unchecked")
 		List<Entity> list = worldObj.getEntitiesWithinAABBExcludingEntity(this, 
@@ -34,12 +39,23 @@ public class Meteor extends Entity {
 			if(e.getClass() == getClass()) {
 				// 2 meteors collided
 				entityDropItem(new ItemStack(Item.diamond), rand.nextInt(5) + 5);
-			} else {
+				setEntityDead();
+			} else if (((Entity)e).canBeCollidedWith()) {
 				// damage area
-				worldObj.createExplosion(this, mPosition.xCoord, mPosition.yCoord, mPosition.zCoord, 2);
+				worldObj.createExplosion(this, posX, posY, posZ, 5F);
+				setEntityDead();
 			}
 		}
-		setPosition(mPosition.xCoord, mPosition.yCoord, mPosition.zCoord);
+		if(! worldObj.isAirBlock((int)posX, (int)posY, (int)posZ)) {
+			worldObj.createExplosion(this, posX, posY, posZ, 5F);
+			setEntityDead();
+		}
+		
+		if(posY < -128) {
+			setEntityDead();
+		}
+		
+		setPosition(posX, posY, posZ);
 	}
 
 	protected void readEntityFromNBT(NBTTagCompound nbttagcompound) {		
@@ -58,14 +74,11 @@ public class Meteor extends Entity {
     }
     
     public float getCollisionBorderSize() {
-    	return 3.0F;
+    	return 1.0F;
     }
 	
 	public Vec3D GetPosition() {
 		return Vec3D.createVector(posX, posY, posZ);
 	}
-    
-	private Vec3D mPosition;
-	private Vec3D mSpeed;
 
 }

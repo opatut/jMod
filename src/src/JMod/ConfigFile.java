@@ -91,6 +91,10 @@ public class ConfigFile {
 	public void ParseLine(String line) {
 		// do no care about indentation
 		line = line.trim();
+
+		// ignore blank lines
+		if(line.length() <= 0)
+			return;
 		
 		// comment lines start with "#"
 		if(line.startsWith("#"))
